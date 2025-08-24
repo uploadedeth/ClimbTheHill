@@ -28,6 +28,9 @@ class BootScene extends Phaser.Scene {
         this.load.image('wallpaper-2', 'assets/images/2.png'); // 100-250m
         this.load.image('wallpaper-3', 'assets/images/3.png'); // 250m+
         
+        // Load collectible item
+        this.load.image('stick', 'assets/images/stick2.png');
+        
         // Generate procedural textures for other game elements
         this.generateTextures();
     }

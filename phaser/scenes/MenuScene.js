@@ -277,18 +277,19 @@ class MenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
         scoringContainer.add(scoringText);
         
-        // Add coin icon
-        const coinIcon = this.add.image(-50, 25, 'coin');
-        coinIcon.setScale(0.8);
-        scoringContainer.add(coinIcon);
+        // Add stick icon
+        const stickIcon = this.add.image(-50, 25, 'stick');
+        stickIcon.setScale(0.06); // Even smaller - 50% reduction from 0.08
+        scoringContainer.add(stickIcon);
         
-        // Animate coin
+        // Animate stick with gentle sway
         this.tweens.add({
-            targets: coinIcon,
-            angle: 360,
-            duration: 2000,
+            targets: stickIcon,
+            angle: 10,
+            duration: 1500,
             repeat: -1,
-            ease: 'Linear'
+            yoyo: true,
+            ease: 'Sine.easeInOut'
         });
     }
     

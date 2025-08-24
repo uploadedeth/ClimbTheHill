@@ -276,8 +276,8 @@ class GameScene extends Phaser.Scene {
     }
     
     createCollectible(x, y) {
-        const collectible = this.add.image(x, y, 'coin');
-        collectible.setScale(0.8);
+        const collectible = this.add.image(x, y, 'stick');
+        collectible.setScale(0.05); // Even smaller - 50% reduction from 0.1
         
         // Add floating animation
         this.tweens.add({
@@ -289,13 +289,14 @@ class GameScene extends Phaser.Scene {
             ease: 'Sine.easeInOut'
         });
         
-        // Add rotation
+        // Add gentle sway animation for stick
         this.tweens.add({
             targets: collectible,
-            angle: 360,
-            duration: 2000,
+            angle: 15, // Gentle sway instead of full rotation
+            duration: 1500,
             repeat: -1,
-            ease: 'Linear'
+            yoyo: true,
+            ease: 'Sine.easeInOut'
         });
         
         // Enable physics for collection
