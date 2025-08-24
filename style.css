@@ -9,7 +9,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #87CEEB 0%, #4A90E2 50%, #2E5C8A 100%);
+    background: #000000;
     color: white;
     overflow: hidden;
     user-select: none;
@@ -43,7 +43,7 @@ html.iframe-mode {
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     position: relative;
-    border: 3px solid #4A90E2;
+    border: 3px solid #000000;
     aspect-ratio: 480/800; /* Maintain vertical aspect ratio */
 }
 
@@ -59,7 +59,7 @@ body.iframe-mode #gameContainer {
 
 /* Phaser canvas will be inserted here automatically */
 canvas {
-    border: 2px solid #4A90E2;
+    border: 2px solid #000000;
     border-radius: 8px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
     max-width: 100%;

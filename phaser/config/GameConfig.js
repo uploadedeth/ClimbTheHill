@@ -7,7 +7,7 @@ function createGameConfig() {
         width: 480,  // Mobile vertical width
         height: 800, // Mobile vertical height
         parent: 'gameContainer',
-        backgroundColor: '#87CEEB', // Sky blue background
+        backgroundColor: '#000000', // Black background
         
         physics: {
             default: 'arcade',

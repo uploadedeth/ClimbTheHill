@@ -213,7 +213,7 @@ class MenuScene extends Phaser.Scene {
         controlsContainer.setScale(1.1); // Increased from 0.8 to 1.1
         
         // Background for controls
-        const controlsBg = this.add.rectangle(0, 0, 200, 120, 0x000000, 0.7); // Increased size
+        const controlsBg = this.add.rectangle(0, 0, 200, 140, 0x000000, 0.7); // Increased height for double jump text
         controlsBg.setStrokeStyle(2, 0xCCCCCC); // White-gray border
         controlsContainer.add(controlsBg);
         
@@ -227,7 +227,7 @@ class MenuScene extends Phaser.Scene {
         controlsContainer.add(controlsTitle);
         
         // Controls text
-        const controlsText = this.add.text(0, -5, 'A/D or ←/→: Move\nSPACE or ↑: Jump', {
+        const controlsText = this.add.text(0, -5, 'A/D or ←/→: Move\nSPACE or ↑: Jump\nDOUBLE SPACE: Double Jump', {
             fontSize: '14px', // Increased from 12px
             fill: '#CCCCCC', // White-gray color
             fontFamily: 'Arial, sans-serif',
@@ -268,7 +268,7 @@ class MenuScene extends Phaser.Scene {
         scoringContainer.add(scoringTitle);
         
         // Scoring text
-        const scoringText = this.add.text(0, -5, 'Height climbed: +10\nPlatform reached: +50\nBonus items: +100', {
+        const scoringText = this.add.text(0, -5, 'Height climbed: +10\nPlatform reached: +50', {
             fontSize: '12px', // Increased from 10px
             fill: '#CCCCCC', // White-gray color
             fontFamily: 'Arial, sans-serif',
@@ -277,10 +277,26 @@ class MenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
         scoringContainer.add(scoringText);
         
-        // Add stick icon
-        const stickIcon = this.add.image(-50, 25, 'stick');
+        // Bonus items text (separate to position with icon)
+        const bonusText = this.add.text(-15, 15, 'Bonus Items:', {
+            fontSize: '12px',
+            fill: '#CCCCCC',
+            fontFamily: 'Arial, sans-serif'
+        }).setOrigin(0.5);
+        scoringContainer.add(bonusText);
+        
+        // Add stick icon next to bonus text
+        const stickIcon = this.add.image(25, 15, 'stick');
         stickIcon.setScale(0.06); // Even smaller - 50% reduction from 0.08
         scoringContainer.add(stickIcon);
+        
+        // Bonus points text
+        const bonusPointsText = this.add.text(50, 15, '+100', {
+            fontSize: '12px',
+            fill: '#CCCCCC',
+            fontFamily: 'Arial, sans-serif'
+        }).setOrigin(0.5);
+        scoringContainer.add(bonusPointsText);
         
         // Animate stick with gentle sway
         this.tweens.add({
