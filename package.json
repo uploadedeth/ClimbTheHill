@@ -1,0 +1,42 @@
+{
+  "name": "climb-the-hill-phaser",
+  "version": "1.0.0",
+  "description": "ClimbTheHill - A vertical platformer game built with Phaser 3 where players climb as high as possible",
+  "main": "index.html",
+  "scripts": {
+    "dev": "http-server . -p 8080 -o",
+    "build": "echo 'Building for production...' && echo 'Game ready for deployment'",
+    "start": "http-server . -p 8080",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d .",
+    "deploy:manual": "echo 'Manual deployment: Push to main branch, enable GitHub Pages in repository settings'",
+    "test:iframe": "http-server . -p 8080 -o /iframe-test.html"
+  },
+  "keywords": [
+    "phaser",
+    "game",
+    "platformer",
+    "climbing",
+    "html5",
+    "canvas",
+    "javascript",
+    "vertical",
+    "infinite"
+  ],
+  "author": "ClimbTheHill Team",
+  "license": "MIT",
+  "dependencies": {
+    "phaser": "^3.70.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0",
+    "http-server": "^14.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/climb-the-hill.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

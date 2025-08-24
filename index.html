@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ClimbTheHill - A vertical platformer game where you climb as high as possible!">
+    <meta name="keywords" content="game, platformer, climbing, html5, canvas, phaser, vertical">
+    <meta name="author" content="ClimbTheHill Team">
+    
+    <!-- Iframe optimization meta tags -->
+    <meta http-equiv="X-Frame-Options" content="ALLOWALL">
+    <meta name="referrer" content="origin-when-cross-origin">
+    
+    <!-- Performance optimization -->
+    <meta http-equiv="Cache-Control" content="public, max-age=31536000">
+    <meta name="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <title>ClimbTheHill</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Iframe detection script -->
+    <script>
+        // Detect if running in iframe and apply styling
+        if (window.self !== window.top) {
+            document.documentElement.classList.add('iframe-mode');
+            document.body.classList.add('iframe-mode');
+        }
+    </script>
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- Phaser will create the canvas here -->
+        
+        <!-- Loading screen -->
+        <div id="loading-screen">
+            <div class="loading-background">
+                <!-- Background will be set via CSS -->
+            </div>
+            <div class="loading-content">
+                <h1 class="loading-title">ClimbTheHill</h1>
+                <p class="loading-subtitle">Reach for the sky!</p>
+                
+                <div class="loading-bar-container">
+                    <div class="loading-bar">
+                        <div class="loading-progress"></div>
+                    </div>
+                    <div class="loading-percentage">0%</div>
+                </div>
+                
+                <p class="loading-text">Building the mountain...</p>
+                
+                <!-- Loading steps indicators -->
+                <div class="loading-steps">
+                    <div class="loading-step active">🏔️</div>
+                    <div class="loading-step">🧗</div>
+                    <div class="loading-step">☁️</div>
+                    <div class="loading-step">⭐</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UI Overlay for HUD elements -->
+        <div id="ui-overlay">
+            <div id="height-display">Height: 0m</div>
+            <div id="score-display">Score: 0</div>
+            <div id="time-display">0:00</div>
+        </div>
+
+        <!-- User status for authentication -->
+        <div id="user-status" style="display: none;">
+            <div class="user-info">
+                <span class="username"></span>
+                <span class="auth-indicator">✓</span>
+            </div>
+        </div>
+
+        <!-- Mobile Controls -->
+        <div id="mobile-controls" class="hidden">
+            <button id="move-left" class="mobile-btn">←</button>
+            <button id="jump-btn" class="mobile-btn">⬆</button>
+            <button id="move-right" class="mobile-btn">→</button>
+        </div>
+    </div>
+
+    <!-- Load Phaser 3 from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+    
+    <!-- Load entities first -->
+    <script src="phaser/entities/Player.js"></script>
+    <script src="phaser/entities/Platform.js"></script>
+    
+    <!-- Load managers -->
+    <script src="phaser/managers/AudioManager.js"></script>
+    <script src="phaser/managers/UIManager.js"></script>
+    
+    <!-- Load scenes -->
+    <script src="phaser/scenes/BootScene.js"></script>
+    <script src="phaser/scenes/MenuScene.js"></script>
+    <script src="phaser/scenes/GameScene.js"></script>
+    <script src="phaser/scenes/GameOverScene.js"></script>
+    
+    <!-- Load config after scenes are defined -->
+    <script src="phaser/config/GameConfig.js"></script>
+    
+    <!-- Load main game initialization last -->
+    <script src="phaser/main-phaser.js"></script>
+</body>
+</html>
