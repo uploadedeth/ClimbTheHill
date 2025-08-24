@@ -564,20 +564,19 @@ class GameScene extends Phaser.Scene {
     checkGameOver() {
         if (this.gameData.isGameOver) return;
         
-        // Calculate current height
-        const currentHeight = Math.max(0, (700 - this.player.y) / 10);
+        // Calculate current height (allow negative values for fall detection)
+        const currentHeight = (700 - this.player.y) / 10;
         
         // Show warning when approaching very low height (optional fall protection)
-        if (currentHeight <= 1 && currentHeight > -5) {
+        if (currentHeight <= 5 && currentHeight > -2) {
             this.showFallWarning();
         } else if (this.fallWarning) {
             this.hideFallWarning();
         }
         
-        // Game over only if player falls way below the starting area (emergency failsafe)
-        // Main game over condition is now time-based
-        if (currentHeight <= -10) {
-
+        // Game over if player falls below starting area
+        // Trigger game over at -2 height (equivalent to y=720, which is 20px below ground level at y=700)
+        if (currentHeight <= -2) {
             this.gameOver();
         }
     }
