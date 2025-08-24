@@ -82,17 +82,20 @@ class GameScene extends Phaser.Scene {
         this.platforms = [];
         this.collectibles = this.physics.add.staticGroup(); // Use physics group for collision detection
         this.backgroundElements = [];
+        
+        // Wallpaper system
+        this.wallpaperSystem = {
+            currentWallpaper: 1,
+            wallpapers: [],
+            isTransitioning: false
+        };
     }
     
     createBackground() {
-        // Create scrolling sky background
-        this.createSkyBackground();
+        // Create dynamic wallpaper system only
+        this.createDynamicWallpaper();
         
-        // Add parallax mountains
-        this.createParallaxMountains();
-        
-        // Add floating clouds
-        this.createFloatingClouds();
+        // Remove old design elements (sky, mountains, clouds) to show wallpapers clearly
     }
     
     createSkyBackground() {
@@ -182,6 +185,21 @@ class GameScene extends Phaser.Scene {
         
         this.clouds.add(cloud);
         return cloud;
+    }
+    
+    createDynamicWallpaper() {
+        // Create wallpaper containers
+        for (let i = 1; i <= 3; i++) {
+            const wallpaper = this.add.image(240, 400, `wallpaper-${i}`);
+            wallpaper.setDisplaySize(480, 800);
+            wallpaper.setScrollFactor(0); // Fixed to camera
+            wallpaper.setDepth(-30); // Behind everything
+            wallpaper.setAlpha(i === 1 ? 1 : 0); // Only first wallpaper visible initially
+            
+            this.wallpaperSystem.wallpapers.push(wallpaper);
+        }
+        
+        console.log('🖼️ Dynamic wallpaper system created');
     }
     
     createPlayer() {
@@ -403,11 +421,6 @@ class GameScene extends Phaser.Scene {
         // Clean up old platforms
         this.cleanupOldPlatforms();
         
-        // Update sky based on height
-        if (this.gameData.height % 100 === 0) { // Update every 100m
-            this.updateSkyGradient(this.gameData.height);
-        }
-        
         // Check game over conditions (only fall detection now, time is main constraint)
         this.checkGameOver();
         
@@ -454,6 +467,67 @@ class GameScene extends Phaser.Scene {
         if (currentHeight > this.gameData.maxHeight) {
             this.gameData.maxHeight = currentHeight;
         }
+        
+        // Check for wallpaper transitions based on height
+        this.checkWallpaperTransition(currentHeight);
+    }
+    
+    checkWallpaperTransition(height) {
+        if (this.wallpaperSystem.isTransitioning) return;
+        
+        let targetWallpaper = 1; // Default to first wallpaper
+        
+        // Determine which wallpaper should be active based on height
+        if (height >= 250) {
+            targetWallpaper = 3; // 250m+ -> wallpaper-3
+        } else if (height >= 100) {
+            targetWallpaper = 2; // 100-250m -> wallpaper-2
+        } else {
+            targetWallpaper = 1; // 0-100m -> wallpaper-1
+        }
+        
+        // Only transition if we need to change wallpapers
+        if (targetWallpaper !== this.wallpaperSystem.currentWallpaper) {
+            this.transitionToWallpaper(targetWallpaper);
+        }
+    }
+    
+    transitionToWallpaper(targetWallpaper) {
+        if (this.wallpaperSystem.isTransitioning) return;
+        
+        this.wallpaperSystem.isTransitioning = true;
+        const currentIndex = this.wallpaperSystem.currentWallpaper - 1;
+        const targetIndex = targetWallpaper - 1;
+        
+        const currentWallpaper = this.wallpaperSystem.wallpapers[currentIndex];
+        const newWallpaper = this.wallpaperSystem.wallpapers[targetIndex];
+        
+        console.log(`🌄 Transitioning wallpaper from ${this.wallpaperSystem.currentWallpaper} to ${targetWallpaper}`);
+        
+        // Set new wallpaper to start invisible
+        newWallpaper.setAlpha(0);
+        
+        // Create smooth fade transition
+        this.tweens.add({
+            targets: newWallpaper,
+            alpha: 1,
+            duration: 2000, // 2 second fade in
+            ease: 'Power2.easeInOut',
+            onComplete: () => {
+                // Fade out the old wallpaper
+                this.tweens.add({
+                    targets: currentWallpaper,
+                    alpha: 0,
+                    duration: 1000, // 1 second fade out
+                    ease: 'Power2.easeInOut',
+                    onComplete: () => {
+                        this.wallpaperSystem.currentWallpaper = targetWallpaper;
+                        this.wallpaperSystem.isTransitioning = false;
+                        console.log(`✅ Wallpaper transition complete to wallpaper ${targetWallpaper}`);
+                    }
+                });
+            }
+        });
     }
     
     checkPlatformGeneration() {
