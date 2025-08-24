@@ -2,7 +2,7 @@
 
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
-        super(scene, x, y, 'player');
+        super(scene, x, y, 'player-sprite');
         
         // Add to scene and physics
         scene.add.existing(this);
@@ -24,9 +24,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setBounce(0.1);
         this.setDragX(100); // Air resistance
         
-        // Visual settings
-        this.setScale(1);
+        // Visual settings - scale down to match original character size
+        this.setScale(0.2); // Scale down the 86x136 sprite to be similar to original 16x16
         this.setDepth(10); // Ensure player is above other objects
+        
+        // Set collision body size and position to align feet with platforms
+        const scaledWidth = 86 * 0.2; // ~17 pixels
+        const scaledHeight = 136 * 0.2; // ~27 pixels
+        this.setSize(scaledWidth, scaledHeight);
+        
+        // Adjust offset so the collision body aligns with the character's feet
+        // Move collision body down so feet touch the platform
+        this.setOffset((86 - scaledWidth) / 2, 136 - scaledHeight);
         
         // Input tracking
         this.cursors = scene.input.keyboard.createCursorKeys();

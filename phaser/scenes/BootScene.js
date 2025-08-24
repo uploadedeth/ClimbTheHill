@@ -15,19 +15,19 @@ class BootScene extends Phaser.Scene {
             console.log('All assets loaded!');
         });
         
-        // Note: In the first phase, we'll use procedural textures
-        // Later, real sprites can be loaded here
         console.log('🎮 Loading ClimbTheHill assets...');
         
-        // Generate procedural textures since we don't have sprites yet
+        // Load player sprite
+        this.load.image('player-sprite', 'assets/images/right-sticky.png');
+        
+        // Generate procedural textures for other game elements
         this.generateTextures();
     }
     
     generateTextures() {
         console.log('🎨 Generating procedural textures...');
         
-        // Generate player character texture
-        this.generatePlayerTexture();
+        // Skip player texture generation - using sprite image instead
         
         // Generate platform textures
         this.generatePlatformTextures();
@@ -42,33 +42,7 @@ class BootScene extends Phaser.Scene {
         this.generateUITextures();
     }
     
-    generatePlayerTexture() {
-        const graphics = this.add.graphics();
-        
-        // Simple player character (16x16 pixel square)
-        graphics.fillStyle(0x4A90E2); // Blue color
-        graphics.fillRect(0, 0, 16, 16);
-        
-        // Add simple details
-        graphics.fillStyle(0x2E5C8A); // Darker blue for shading
-        graphics.fillRect(12, 0, 4, 16); // Right side shading
-        graphics.fillRect(0, 12, 16, 4); // Bottom shading
-        
-        // Add eyes
-        graphics.fillStyle(0xFFFFFF); // White eyes
-        graphics.fillRect(3, 3, 2, 2);
-        graphics.fillRect(11, 3, 2, 2);
-        
-        // Add pupils
-        graphics.fillStyle(0x000000); // Black pupils
-        graphics.fillRect(4, 3, 1, 1);
-        graphics.fillRect(12, 3, 1, 1);
-        
-        graphics.generateTexture('player', 16, 16);
-        graphics.destroy();
-        
-        console.log('✅ Player texture generated');
-    }
+
     
     generatePlatformTextures() {
         // Standard platform (64x16)
@@ -235,27 +209,26 @@ class BootScene extends Phaser.Scene {
         try {
             console.log('🎭 Creating player animations...');
             
-            // Since we're using a simple square texture, we'll create simple color-change animations
-            // In the future, these can be replaced with proper sprite animations
+            // Using the player sprite image for all animations
             
-            // Idle animation (no animation needed for square)
+            // Idle animation
             this.anims.create({
                 key: 'player-idle',
-                frames: [{ key: 'player', frame: 0 }],
+                frames: [{ key: 'player-sprite', frame: 0 }],
                 frameRate: 1
             });
             
-            // Jump animation (same texture, can be enhanced with particles later)
+            // Jump animation
             this.anims.create({
                 key: 'player-jump',
-                frames: [{ key: 'player', frame: 0 }],
+                frames: [{ key: 'player-sprite', frame: 0 }],
                 frameRate: 1
             });
             
-            // Fall animation (same texture)
+            // Fall animation
             this.anims.create({
                 key: 'player-fall',
-                frames: [{ key: 'player', frame: 0 }],
+                frames: [{ key: 'player-sprite', frame: 0 }],
                 frameRate: 1
             });
             
