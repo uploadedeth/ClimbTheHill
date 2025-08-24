@@ -12,7 +12,7 @@ class GameScene extends Phaser.Scene {
         this.initializeGameState();
         
         // Create world bounds (infinite height)
-        this.physics.world.setBounds(0, -10000, 800, 20000);
+        this.physics.world.setBounds(0, -10000, 480, 20000);
         
         // Create background
         this.createBackground();
@@ -112,9 +112,9 @@ class GameScene extends Phaser.Scene {
         const skyBlue = { r: 135, g: 206, b: 235 };
         const spaceBlue = { r: 25, g: 25, b: 112 };
         
-        for (let i = 0; i < 600; i++) {
+        for (let i = 0; i < 800; i++) {
             const y = i;
-            const localRatio = (i / 600) + heightRatio;
+            const localRatio = (i / 800) + heightRatio;
             const clampedRatio = Math.min(localRatio, 1);
             
             const color = Phaser.Display.Color.Interpolate.ColorWithColor(
@@ -125,7 +125,7 @@ class GameScene extends Phaser.Scene {
             );
             
             this.skyGraphics.fillStyle(Phaser.Display.Color.GetColor(color.r, color.g, color.b));
-            this.skyGraphics.fillRect(0, y, 800, 1);
+            this.skyGraphics.fillRect(0, y, 480, 1);
         }
     }
     
@@ -137,10 +137,10 @@ class GameScene extends Phaser.Scene {
             const mountains = this.add.group();
             
             // Create mountain sprites
-            for (let i = 0; i < 5; i++) {
-                const mountain = this.add.image(i * 200, 500 + layer * 20, 'mountain');
+            for (let i = 0; i < 4; i++) {
+                const mountain = this.add.image(i * 150, 650 + layer * 20, 'mountain');
                 mountain.setScrollFactor(0.1 + layer * 0.1); // Different parallax speeds
-                mountain.setScale(0.5 + layer * 0.2);
+                mountain.setScale(0.4 + layer * 0.15);
                 mountain.setAlpha(0.7 - layer * 0.2);
                 mountain.setTint(0x888888 + layer * 0x222222);
                 mountains.add(mountain);
@@ -185,8 +185,8 @@ class GameScene extends Phaser.Scene {
     }
     
     createPlayer() {
-        // Start at height 10: height = (550 - y) / 10, so y = 550 - (height * 10) = 550 - 100 = 450
-        this.player = new Player(this, 400, 450);
+        // Start at height 10: height = (700 - y) / 10, so y = 700 - (height * 10) = 700 - 100 = 600
+        this.player = new Player(this, 240, 600);
         
         // Set up player event listeners
         this.player.on('jumped', () => {
@@ -197,25 +197,25 @@ class GameScene extends Phaser.Scene {
     createPlatforms() {
         this.platforms = this.add.group();
         
-        // Create ground reference platform at height 0 (y=550)
-        const groundPlatform = new Platform(this, 400, 550, 'normal');
+        // Create ground reference platform at height 0 (y=700)
+        const groundPlatform = new Platform(this, 240, 700, 'normal');
         groundPlatform.platformIndex = -1; // Below starting level
         this.platforms.add(groundPlatform);
         
         // Create starting platform near player (index 0) at height ~7
-        const startPlatform = new Platform(this, 400, 480, 'normal');
+        const startPlatform = new Platform(this, 240, 630, 'normal');
         startPlatform.platformIndex = 0; // Starting level
         this.platforms.add(startPlatform);
         
         // TEMPORARY: Add bouncy platform for testing
-        const testBouncy = new Platform(this, 500, 420, 'bouncy');
+        const testBouncy = new Platform(this, 340, 570, 'bouncy');
         testBouncy.platformIndex = 0.5;
         this.platforms.add(testBouncy);
         
         // Create initial platform clusters with indices
-        this.generatePlatformCluster(400, 350); // Higher up
-        this.generatePlatformCluster(300, 200); // Even higher
-        this.generatePlatformCluster(500, 100);
+        this.generatePlatformCluster(240, 500); // Higher up
+        this.generatePlatformCluster(180, 350); // Even higher
+        this.generatePlatformCluster(300, 200);
     }
     
     generatePlatformCluster(centerX, centerY) {
@@ -225,7 +225,7 @@ class GameScene extends Phaser.Scene {
             const offsetX = (Math.random() - 0.5) * 400;
             const offsetY = Math.random() * 60;
             
-            const x = Phaser.Math.Clamp(centerX + offsetX, 50, 750);
+            const x = Phaser.Math.Clamp(centerX + offsetX, 50, 430);
             const y = centerY + offsetY;
             
             // Choose platform type based on height (bouncy platforms rare and at higher altitudes)
@@ -250,7 +250,7 @@ class GameScene extends Phaser.Scene {
             
             // Occasionally add collectibles
             if (Math.random() < 0.3) {
-                this.createCollectible(x, y - 30);
+                this.createCollectible(x, y - 16); // Reduced from -30 to -16 for easier collection
             }
         }
         
@@ -294,7 +294,7 @@ class GameScene extends Phaser.Scene {
         this.cameras.main.setFollowOffset(0, 100);
         
         // Set camera bounds
-        this.cameras.main.setBounds(0, -10000, 800, 20000);
+        this.cameras.main.setBounds(0, -10000, 480, 20000);
         
         // Set camera lerp for smooth following
         this.cameras.main.setLerp(0.1, 0.2);
@@ -360,6 +360,12 @@ class GameScene extends Phaser.Scene {
     }
     
     createUI() {
+        // Show the UI overlay when game starts
+        const uiOverlay = document.getElementById('ui-overlay');
+        if (uiOverlay) {
+            uiOverlay.style.display = 'block';
+        }
+        
         // UI is handled by UIManager, just update it
         this.updateUI();
     }
@@ -441,7 +447,7 @@ class GameScene extends Phaser.Scene {
     
     updateHeightDisplay() {
         // Calculate height based on player position for display only
-        const currentHeight = Math.max(0, (550 - this.player.y) / 10);
+        const currentHeight = Math.max(0, (700 - this.player.y) / 10);
         this.gameData.height = currentHeight;
         
         // Update max height for display
@@ -456,7 +462,7 @@ class GameScene extends Phaser.Scene {
         // Generate new platforms if camera is approaching the top platforms
         if (this.platformSettings.lastPlatformY - cameraY > -this.platformSettings.generationThreshold) {
             const newY = this.platformSettings.lastPlatformY - this.platformSettings.minHeight;
-            const newX = 200 + Math.random() * 400;
+            const newX = 120 + Math.random() * 240;
             
             this.generatePlatformCluster(newX, newY);
         }
@@ -484,7 +490,7 @@ class GameScene extends Phaser.Scene {
         if (this.gameData.isGameOver) return;
         
         // Calculate current height
-        const currentHeight = Math.max(0, (550 - this.player.y) / 10);
+        const currentHeight = Math.max(0, (700 - this.player.y) / 10);
         
         // Show warning when approaching very low height (optional fall protection)
         if (currentHeight <= 1 && currentHeight > -5) {
@@ -504,7 +510,7 @@ class GameScene extends Phaser.Scene {
     showFallWarning() {
         if (this.fallWarning) return; // Already showing
         
-        this.fallWarning = this.add.text(400, 100, '⚠️ CLIMB HIGHER! ⚠️', {
+        this.fallWarning = this.add.text(240, 100, '⚠️ CLIMB HIGHER! ⚠️', {
             fontSize: '24px',
             fill: '#FF0000',
             fontFamily: 'Arial, sans-serif',

@@ -72,8 +72,8 @@ class UIManager {
         const popup = document.createElement('div');
         popup.className = 'score-popup';
         popup.textContent = `+${points}`;
-        popup.style.left = Math.random() * 200 + 300 + 'px';
-        popup.style.top = Math.random() * 100 + 200 + 'px';
+        popup.style.left = Math.random() * 120 + 180 + 'px';
+        popup.style.top = Math.random() * 100 + 300 + 'px';
         
         document.body.appendChild(popup);
         

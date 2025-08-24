@@ -31,30 +31,16 @@ class MenuScene extends Phaser.Scene {
     }
     
     createBackground() {
-        // Create gradient sky background
-        const skyGraphics = this.add.graphics();
+        // Add wallpaper background image
+        const wallpaper = this.add.image(240, 400, 'menu-wallpaper');
+        wallpaper.setDisplaySize(480, 800); // Scale to fit vertical format
+        wallpaper.setDepth(-20); // Behind everything else
         
-        // Create a sky gradient from light blue at top to darker at bottom
-        for (let i = 0; i < 600; i++) {
-            const alpha = i / 600;
-            const color = Phaser.Display.Color.Interpolate.ColorWithColor(
-                { r: 135, g: 206, b: 235 }, // Light sky blue
-                { r: 70, g: 130, b: 180 },  // Steel blue
-                100,
-                alpha * 100
-            );
-            skyGraphics.fillStyle(Phaser.Display.Color.GetColor(color.r, color.g, color.b));
-            skyGraphics.fillRect(0, i, 800, 1);
-        }
-        
-        // Add mountains in background
-        this.createMountainBackground();
-        
-        // Add floating clouds
-        this.createClouds();
+        // Remove procedural mountains and clouds since wallpaper provides the background
         
         // Add overlay for better text readability
-        const overlay = this.add.rectangle(400, 300, 800, 600, 0x000000, 0.3);
+        const overlay = this.add.rectangle(240, 400, 480, 800, 0x000000, 0.15);
+        overlay.setDepth(-10); // Above wallpaper but below UI elements
     }
     
     createMountainBackground() {
@@ -67,14 +53,14 @@ class MenuScene extends Phaser.Scene {
             
             // Create jagged mountain silhouette
             mountainGraphics.beginPath();
-            mountainGraphics.moveTo(0, 600);
+            mountainGraphics.moveTo(0, 800);
             
-            for (let x = 0; x <= 800; x += 50) {
-                const height = 400 - (layer * 50) + Math.random() * 100;
+            for (let x = 0; x <= 480; x += 40) {
+                const height = 600 - (layer * 50) + Math.random() * 100;
                 mountainGraphics.lineTo(x, height);
             }
             
-            mountainGraphics.lineTo(800, 600);
+            mountainGraphics.lineTo(480, 800);
             mountainGraphics.closePath();
             mountainGraphics.fillPath();
             
@@ -85,10 +71,10 @@ class MenuScene extends Phaser.Scene {
     
     createClouds() {
         // Add some floating clouds
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 6; i++) {
             const cloud = this.add.image(
-                Math.random() * 800,
-                Math.random() * 200 + 50,
+                Math.random() * 480,
+                Math.random() * 300 + 50,
                 'cloud'
             );
             cloud.setScale(0.5 + Math.random() * 0.5);
@@ -109,9 +95,9 @@ class MenuScene extends Phaser.Scene {
     
     createTitle() {
         // Main game title
-        const title = this.add.text(400, 120, 'CLIMB THE HILL', {
-            fontSize: '56px',
-            fill: '#4A90E2',
+        const title = this.add.text(240, 150, 'CLIMB THE HILL', {
+            fontSize: '42px',
+            fill: '#CC5500', // Dark orange color
             fontFamily: 'Arial, sans-serif',
             fontStyle: 'bold',
             stroke: '#FFFFFF',
@@ -126,9 +112,9 @@ class MenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
         
         // Subtitle
-        const subtitle = this.add.text(400, 180, 'Climb as high as you can!', {
-            fontSize: '24px',
-            fill: '#32CD32',
+        const subtitle = this.add.text(240, 210, 'Climb as high as you can!', {
+            fontSize: '20px',
+            fill: '#FFFFFF', // White color
             fontFamily: 'Arial, sans-serif',
             fontStyle: 'bold',
             stroke: '#000000',
@@ -166,12 +152,13 @@ class MenuScene extends Phaser.Scene {
     
     createStartButton() {
         // Large start button in center
-        const startButton = this.add.image(400, 280, 'button-bg');
+        const startButton = this.add.image(240, 320, 'button-bg');
+        // Remove scale to use full button size (250x60)
         startButton.setInteractive({ useHandCursor: true });
         
-        const startText = this.add.text(400, 280, 'START CLIMBING', {
-            fontSize: '32px',
-            fill: '#FFFFFF',
+        const startText = this.add.text(240, 320, 'START CLIMBING', {
+            fontSize: '20px', // Reduced from 24px to 20px
+            fill: '#FFFFFF', // White text
             fontFamily: 'Arial, sans-serif',
             fontStyle: 'bold',
             stroke: '#000000',
@@ -183,8 +170,8 @@ class MenuScene extends Phaser.Scene {
             startButton.setTexture('button-hover');
             this.tweens.add({
                 targets: [startButton, startText],
-                scaleX: 1.1,
-                scaleY: 1.1,
+                scaleX: 1.05,
+                scaleY: 1.05,
                 duration: 200,
                 ease: 'Back.easeOut'
             });
@@ -222,17 +209,18 @@ class MenuScene extends Phaser.Scene {
     
     createInstructions() {
         // Controls section in bottom left
-        const controlsContainer = this.add.container(150, 480);
+        const controlsContainer = this.add.container(120, 580);
+        controlsContainer.setScale(1.1); // Increased from 0.8 to 1.1
         
         // Background for controls
-        const controlsBg = this.add.rectangle(0, 0, 180, 100, 0x000000, 0.7);
-        controlsBg.setStrokeStyle(2, 0x4A90E2);
+        const controlsBg = this.add.rectangle(0, 0, 200, 120, 0x000000, 0.7); // Increased size
+        controlsBg.setStrokeStyle(2, 0xCCCCCC); // White-gray border
         controlsContainer.add(controlsBg);
         
         // Controls title
-        const controlsTitle = this.add.text(0, -35, 'CONTROLS', {
-            fontSize: '16px',
-            fill: '#4A90E2',
+        const controlsTitle = this.add.text(0, -40, 'CONTROLS', {
+            fontSize: '18px', // Increased from 16px
+            fill: '#CCCCCC', // White-gray color
             fontFamily: 'Arial, sans-serif',
             fontStyle: 'bold'
         }).setOrigin(0.5);
@@ -240,19 +228,19 @@ class MenuScene extends Phaser.Scene {
         
         // Controls text
         const controlsText = this.add.text(0, -5, 'A/D or ←/→: Move\nSPACE or ↑: Jump', {
-            fontSize: '12px',
-            fill: '#FFFFFF',
+            fontSize: '14px', // Increased from 12px
+            fill: '#CCCCCC', // White-gray color
             fontFamily: 'Arial, sans-serif',
             align: 'center',
-            lineSpacing: 2
+            lineSpacing: 4
         }).setOrigin(0.5);
         controlsContainer.add(controlsText);
         
         // Mobile controls hint
         if (this.isTouchDevice()) {
-            const mobileHint = this.add.text(0, 25, 'Touch controls\navailable', {
-                fontSize: '10px',
-                fill: '#CCCCCC',
+            const mobileHint = this.add.text(0, 30, 'Touch controls\navailable', {
+                fontSize: '12px', // Increased from 10px
+                fill: '#AAAAAA', // Slightly darker gray
                 fontFamily: 'Arial, sans-serif',
                 align: 'center'
             }).setOrigin(0.5);
@@ -262,17 +250,18 @@ class MenuScene extends Phaser.Scene {
     
     createScoringInfo() {
         // Scoring info in bottom right
-        const scoringContainer = this.add.container(650, 480);
+        const scoringContainer = this.add.container(360, 580);
+        scoringContainer.setScale(1.1); // Increased from 0.8 to 1.1
         
         // Background for scoring info
-        const scoringBg = this.add.rectangle(0, 0, 180, 100, 0x000000, 0.7);
-        scoringBg.setStrokeStyle(2, 0x32CD32);
+        const scoringBg = this.add.rectangle(0, 0, 200, 120, 0x000000, 0.7); // Increased size
+        scoringBg.setStrokeStyle(2, 0xCCCCCC); // White-gray border
         scoringContainer.add(scoringBg);
         
         // Scoring title
-        const scoringTitle = this.add.text(0, -35, 'SCORING', {
-            fontSize: '16px',
-            fill: '#32CD32',
+        const scoringTitle = this.add.text(0, -40, 'SCORING', {
+            fontSize: '18px', // Increased from 16px
+            fill: '#CCCCCC', // White-gray color
             fontFamily: 'Arial, sans-serif',
             fontStyle: 'bold'
         }).setOrigin(0.5);
@@ -280,11 +269,11 @@ class MenuScene extends Phaser.Scene {
         
         // Scoring text
         const scoringText = this.add.text(0, -5, 'Height climbed: +10\nPlatform reached: +50\nBonus items: +100', {
-            fontSize: '10px',
-            fill: '#FFFFFF',
+            fontSize: '12px', // Increased from 10px
+            fill: '#CCCCCC', // White-gray color
             fontFamily: 'Arial, sans-serif',
             align: 'center',
-            lineSpacing: 2
+            lineSpacing: 4
         }).setOrigin(0.5);
         scoringContainer.add(scoringText);
         
@@ -340,7 +329,7 @@ class MenuScene extends Phaser.Scene {
         }
         
         // Add screen transition effect
-        const overlay = this.add.rectangle(400, 300, 800, 600, 0x000000, 0);
+        const overlay = this.add.rectangle(240, 400, 480, 800, 0x000000, 0);
         overlay.setDepth(1000);
         
         this.tweens.add({

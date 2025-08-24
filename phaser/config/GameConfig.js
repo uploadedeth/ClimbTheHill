@@ -4,8 +4,8 @@
 function createGameConfig() {
     return {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
+        width: 480,  // Mobile vertical width
+        height: 800, // Mobile vertical height
         parent: 'gameContainer',
         backgroundColor: '#87CEEB', // Sky blue background
         
@@ -23,12 +23,12 @@ function createGameConfig() {
             mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH,
             min: {
-                width: 400,
-                height: 300
+                width: 320,
+                height: 568
             },
             max: {
-                width: 1600,
-                height: 1200
+                width: 600,
+                height: 1024
             }
         },
         

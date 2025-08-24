@@ -35,7 +35,7 @@ html.iframe-mode {
 /* Game container */
 #gameContainer {
     width: 100%;
-    max-width: 800px;
+    max-width: 480px;
     height: auto;
     margin: 0 auto;
     background: #000;
@@ -44,6 +44,7 @@ html.iframe-mode {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     position: relative;
     border: 3px solid #4A90E2;
+    aspect-ratio: 480/800; /* Maintain vertical aspect ratio */
 }
 
 /* Iframe-specific game container */
@@ -99,7 +100,7 @@ body.iframe-mode canvas {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, #87CEEB 0%, #4A90E2 50%, #2E5C8A 100%);
+    background-image: url('assets/images/menu-wallpaper.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -126,7 +127,7 @@ body.iframe-mode canvas {
 .loading-title {
     font-size: 52px;
     margin-bottom: 10px;
-    color: #4A90E2;
+    color: #CC5500; /* Changed to dark orange to match menu */
     font-family: 'Arial', sans-serif;
     font-weight: bold;
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
@@ -259,21 +260,24 @@ body.iframe-mode canvas {
     bottom: 0;
     pointer-events: none;
     z-index: 50;
+    display: none; /* Hidden by default, shown only during gameplay */
 }
 
 #score-display {
     position: absolute;
     top: 20px;
     right: 20px;
-    font-size: 24px;
+    font-size: 16px;
     font-weight: bold;
     color: #FFD700;
     background: rgba(0, 0, 0, 0.7);
-    padding: 10px 15px;
-    border-radius: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
     backdrop-filter: blur(5px);
     border: 2px solid rgba(255, 215, 0, 0.5);
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    max-width: 100px;
+    text-align: center;
 }
 
 #height-display {
@@ -366,52 +370,76 @@ body.iframe-mode canvas {
     border-color: rgba(50, 205, 50, 0.8);
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    #height-display {
-        font-size: 24px;
-        padding: 8px 16px;
-        top: 15px;
-        min-width: 120px;
+/* Responsive design - Mobile Portrait First */
+@media (max-width: 600px) {
+    #gameContainer {
+        max-width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        aspect-ratio: unset;
+        border: none;
     }
     
-    #score-display, #time-display {
-        font-size: 18px;
-        padding: 8px 12px;
-        top: 15px;
-    }
-    
-    #mobile-controls {
-        display: flex;
-        bottom: 15px;
-        gap: 12px;
-    }
-    
-    .mobile-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 24px;
-    }
-    
-    .loading-content h1 {
-        font-size: 36px;
-    }
-    
-    .loading-content {
-        padding: 20px;
-    }
-}
-
-@media (max-width: 480px) {
     #height-display {
         font-size: 20px;
+        padding: 6px 12px;
         top: 10px;
         min-width: 100px;
     }
     
     #score-display, #time-display {
-        font-size: 16px;
+        font-size: 14px;
+        padding: 5px 8px;
         top: 10px;
+    }
+    
+    #score-display {
+        right: 10px;
+        max-width: 80px;
+    }
+    
+    #time-display {
+        left: 10px;
+    }
+    
+    #mobile-controls {
+        display: flex;
+        bottom: 20px;
+        gap: 15px;
+    }
+    
+    .mobile-btn {
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+    }
+    
+    .loading-title {
+        font-size: 32px;
+    }
+    
+    .loading-content {
+        padding: 20px;
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 400px) {
+    #height-display {
+        font-size: 18px;
+        top: 8px;
+        min-width: 90px;
+        padding: 5px 10px;
+    }
+    
+    #score-display, #time-display {
+        font-size: 12px;
+        top: 8px;
+        padding: 4px 6px;
+    }
+    
+    #score-display {
+        max-width: 70px;
     }
     
     .mobile-btn {
@@ -420,8 +448,12 @@ body.iframe-mode canvas {
         font-size: 20px;
     }
     
-    .loading-content h1 {
-        font-size: 28px;
+    .loading-title {
+        font-size: 26px;
+    }
+    
+    .loading-subtitle {
+        font-size: 16px;
     }
 }
 

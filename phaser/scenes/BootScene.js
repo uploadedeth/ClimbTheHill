@@ -20,6 +20,9 @@ class BootScene extends Phaser.Scene {
         // Load player sprite
         this.load.image('player-sprite', 'assets/images/right-sticky.png');
         
+        // Load menu wallpaper
+        this.load.image('menu-wallpaper', 'assets/images/menu-wallpaper.png');
+        
         // Generate procedural textures for other game elements
         this.generateTextures();
     }
@@ -154,22 +157,22 @@ class BootScene extends Phaser.Scene {
     }
     
     generateUITextures() {
-        // Button background
+        // Button background (Orange)
         const buttonGraphics = this.add.graphics();
-        buttonGraphics.fillStyle(0x4A90E2); // Blue
-        buttonGraphics.fillRoundedRect(0, 0, 200, 60, 10);
-        buttonGraphics.lineStyle(2, 0x2E5C8A); // Darker blue border
-        buttonGraphics.strokeRoundedRect(0, 0, 200, 60, 10);
-        buttonGraphics.generateTexture('button-bg', 200, 60);
+        buttonGraphics.fillStyle(0xFF6600); // Orange
+        buttonGraphics.fillRoundedRect(0, 0, 250, 60, 10); // Increased width from 200 to 250
+        buttonGraphics.lineStyle(2, 0xCC5500); // Darker orange border
+        buttonGraphics.strokeRoundedRect(0, 0, 250, 60, 10);
+        buttonGraphics.generateTexture('button-bg', 250, 60);
         buttonGraphics.destroy();
         
-        // Button hover state
+        // Button hover state (Lighter Orange)
         const buttonHoverGraphics = this.add.graphics();
-        buttonHoverGraphics.fillStyle(0x5BA0F2); // Lighter blue
-        buttonHoverGraphics.fillRoundedRect(0, 0, 200, 60, 10);
-        buttonHoverGraphics.lineStyle(2, 0x4A90E2); // Blue border
-        buttonHoverGraphics.strokeRoundedRect(0, 0, 200, 60, 10);
-        buttonHoverGraphics.generateTexture('button-hover', 200, 60);
+        buttonHoverGraphics.fillStyle(0xFF8533); // Lighter orange
+        buttonHoverGraphics.fillRoundedRect(0, 0, 250, 60, 10); // Increased width from 200 to 250
+        buttonHoverGraphics.lineStyle(2, 0xFF6600); // Orange border
+        buttonHoverGraphics.strokeRoundedRect(0, 0, 250, 60, 10);
+        buttonHoverGraphics.generateTexture('button-hover', 250, 60);
         buttonHoverGraphics.destroy();
         
         // Score coin texture

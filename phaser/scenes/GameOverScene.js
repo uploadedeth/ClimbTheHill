@@ -40,7 +40,7 @@ class GameOverScene extends Phaser.Scene {
     
     createBackground() {
         // Dark overlay background
-        const overlay = this.add.rectangle(400, 300, 800, 600, 0x000000, 0.8);
+        const overlay = this.add.rectangle(240, 400, 480, 800, 0x000000, 0.8);
         
         // Add some stars for atmosphere (since player climbed high)
         this.createStars();
@@ -52,10 +52,10 @@ class GameOverScene extends Phaser.Scene {
     createStars() {
         this.stars = this.add.group();
         
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 60; i++) {
             const star = this.add.circle(
+                Math.random() * 480,
                 Math.random() * 800,
-                Math.random() * 600,
                 1 + Math.random() * 2,
                 0xFFFFFF
             );
@@ -78,19 +78,19 @@ class GameOverScene extends Phaser.Scene {
     
     createFloatingParticles() {
         // Create some floating dust particles for atmosphere
-        this.particles = this.add.particles(400, 600, 'dust-particle', {
+        this.particles = this.add.particles(240, 800, 'dust-particle', {
             speed: { min: 10, max: 30 },
             scale: { start: 0.1, end: 0 },
             lifespan: 3000,
             frequency: 200,
-            emitZone: { source: new Phaser.Geom.Rectangle(0, 0, 800, 50) }
+            emitZone: { source: new Phaser.Geom.Rectangle(0, 0, 480, 50) }
         });
     }
     
     createTitle() {
         // Main title
-        this.titleText = this.add.text(400, 120, 'CLIMB COMPLETE!', {
-            fontSize: '48px',
+        this.titleText = this.add.text(240, 120, 'CLIMB COMPLETE!', {
+            fontSize: '36px',
             fill: this.victory ? '#32CD32' : '#FF6B6B',
             fontFamily: 'Arial, sans-serif',
             fontStyle: 'bold',
@@ -107,8 +107,8 @@ class GameOverScene extends Phaser.Scene {
         
         // Subtitle based on performance
         let subtitle = this.getSubtitle();
-        this.subtitleText = this.add.text(400, 170, subtitle, {
-            fontSize: '20px',
+        this.subtitleText = this.add.text(240, 170, subtitle, {
+            fontSize: '16px',
             fill: '#FFFFFF',
             fontFamily: 'Arial, sans-serif',
             align: 'center'
@@ -133,10 +133,10 @@ class GameOverScene extends Phaser.Scene {
     
     createStatsDisplay() {
         // Stats container
-        const statsContainer = this.add.container(400, 320);
+        const statsContainer = this.add.container(240, 350);
         
         // Background for stats
-        const statsBg = this.add.rectangle(0, 0, 500, 200, 0x000000, 0.7);
+        const statsBg = this.add.rectangle(0, 0, 420, 200, 0x000000, 0.7);
         statsBg.setStrokeStyle(3, 0x4A90E2);
         statsContainer.add(statsBg);
         
@@ -223,24 +223,24 @@ class GameOverScene extends Phaser.Scene {
     
     createButtons() {
         // Play Again button
-        this.playAgainButton = this.add.image(280, 480, 'button-bg');
+        this.playAgainButton = this.add.image(240, 580, 'button-bg');
         this.playAgainButton.setInteractive({ useHandCursor: true });
-        this.playAgainButton.setScale(0.8);
+        this.playAgainButton.setScale(0.7);
         
-        this.playAgainText = this.add.text(280, 480, 'PLAY AGAIN', {
-            fontSize: '20px',
+        this.playAgainText = this.add.text(240, 580, 'PLAY AGAIN', {
+            fontSize: '18px',
             fill: '#FFFFFF',
             fontFamily: 'Arial, sans-serif',
             fontStyle: 'bold'
         }).setOrigin(0.5);
         
         // Main Menu button
-        this.mainMenuButton = this.add.image(520, 480, 'button-bg');
+        this.mainMenuButton = this.add.image(240, 660, 'button-bg');
         this.mainMenuButton.setInteractive({ useHandCursor: true });
-        this.mainMenuButton.setScale(0.8);
+        this.mainMenuButton.setScale(0.7);
         
-        this.mainMenuText = this.add.text(520, 480, 'MAIN MENU', {
-            fontSize: '20px',
+        this.mainMenuText = this.add.text(240, 660, 'MAIN MENU', {
+            fontSize: '18px',
             fill: '#FFFFFF',
             fontFamily: 'Arial, sans-serif',
             fontStyle: 'bold'
@@ -262,8 +262,8 @@ class GameOverScene extends Phaser.Scene {
             this.playAgainButton.setTexture('button-hover');
             this.tweens.add({
                 targets: [this.playAgainButton, this.playAgainText],
-                scaleX: 0.9,
-                scaleY: 0.9,
+                scaleX: 0.8,
+                scaleY: 0.8,
                 duration: 200,
                 ease: 'Back.easeOut'
             });
@@ -273,8 +273,8 @@ class GameOverScene extends Phaser.Scene {
             this.playAgainButton.setTexture('button-bg');
             this.tweens.add({
                 targets: [this.playAgainButton, this.playAgainText],
-                scaleX: 0.8,
-                scaleY: 0.8,
+                scaleX: 0.7,
+                scaleY: 0.7,
                 duration: 200,
                 ease: 'Back.easeOut'
             });
@@ -289,8 +289,8 @@ class GameOverScene extends Phaser.Scene {
             this.mainMenuButton.setTexture('button-hover');
             this.tweens.add({
                 targets: [this.mainMenuButton, this.mainMenuText],
-                scaleX: 0.9,
-                scaleY: 0.9,
+                scaleX: 0.8,
+                scaleY: 0.8,
                 duration: 200,
                 ease: 'Back.easeOut'
             });
@@ -300,8 +300,8 @@ class GameOverScene extends Phaser.Scene {
             this.mainMenuButton.setTexture('button-bg');
             this.tweens.add({
                 targets: [this.mainMenuButton, this.mainMenuText],
-                scaleX: 0.8,
-                scaleY: 0.8,
+                scaleX: 0.7,
+                scaleY: 0.7,
                 duration: 200,
                 ease: 'Back.easeOut'
             });
@@ -357,7 +357,7 @@ class GameOverScene extends Phaser.Scene {
         // Animate buttons
         this.tweens.add({
             targets: [this.playAgainButton, this.playAgainText],
-            scale: 0.8,
+            scale: 0.7,
             duration: 600,
             ease: 'Back.easeOut',
             delay: 1400
@@ -365,7 +365,7 @@ class GameOverScene extends Phaser.Scene {
         
         this.tweens.add({
             targets: [this.mainMenuButton, this.mainMenuText],
-            scale: 0.8,
+            scale: 0.7,
             duration: 600,
             ease: 'Back.easeOut',
             delay: 1600
@@ -398,6 +398,12 @@ class GameOverScene extends Phaser.Scene {
         // Play sound
         if (window.GameManagers.audio) {
             window.GameManagers.audio.playMenuSound();
+        }
+        
+        // Hide UI overlay when going back to menu
+        const uiOverlay = document.getElementById('ui-overlay');
+        if (uiOverlay) {
+            uiOverlay.style.display = 'none';
         }
         
         // Reset UI
