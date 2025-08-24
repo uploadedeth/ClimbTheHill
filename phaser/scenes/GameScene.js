@@ -51,7 +51,7 @@ class GameScene extends Phaser.Scene {
             maxHeight: 0,
             highestPlatformReached: 0, // Track highest platform index reached
             currentPlatformIndex: 0, // Current platform the player is on
-            gameTime: 0,
+            gameTime: 60, // Start with 60 seconds (countdown)
             startTime: Date.now(),
             isGameOver: false,
             platformsCreated: 0,
@@ -185,7 +185,8 @@ class GameScene extends Phaser.Scene {
     }
     
     createPlayer() {
-        this.player = new Player(this, 400, 500);
+        // Start at height 10: height = (550 - y) / 10, so y = 550 - (height * 10) = 550 - 100 = 450
+        this.player = new Player(this, 400, 450);
         
         // Set up player event listeners
         this.player.on('jumped', () => {
@@ -196,14 +197,19 @@ class GameScene extends Phaser.Scene {
     createPlatforms() {
         this.platforms = this.add.group();
         
-        // Create starting platform (index 0)
-        const startPlatform = new Platform(this, 400, 550, 'normal');
-        startPlatform.platformIndex = 0; // Ground level
+        // Create ground reference platform at height 0 (y=550)
+        const groundPlatform = new Platform(this, 400, 550, 'normal');
+        groundPlatform.platformIndex = -1; // Below starting level
+        this.platforms.add(groundPlatform);
+        
+        // Create starting platform near player (index 0) at height ~7
+        const startPlatform = new Platform(this, 400, 480, 'normal');
+        startPlatform.platformIndex = 0; // Starting level
         this.platforms.add(startPlatform);
         
         // Create initial platform clusters with indices
-        this.generatePlatformCluster(400, 400);
-        this.generatePlatformCluster(300, 250);
+        this.generatePlatformCluster(400, 350); // Higher up
+        this.generatePlatformCluster(300, 200); // Even higher
         this.generatePlatformCluster(500, 100);
     }
     
@@ -366,8 +372,16 @@ class GameScene extends Phaser.Scene {
     updateGameLoop() {
         if (this.gameData.isGameOver) return;
         
-        // Update game time
-        this.gameData.gameTime = (Date.now() - this.gameData.startTime) / 1000;
+        // Update game time (countdown from 60 seconds)
+        const elapsedSeconds = (Date.now() - this.gameData.startTime) / 1000;
+        this.gameData.gameTime = Math.max(0, 60 - elapsedSeconds);
+        
+        // Check if time is up
+        if (this.gameData.gameTime <= 0) {
+            console.log('⏰ Time Up! Game ended after 60 seconds');
+            this.gameOver();
+            return;
+        }
         
         // Update height display only (no scoring)
         this.updateHeightDisplay();
@@ -383,7 +397,7 @@ class GameScene extends Phaser.Scene {
             this.updateSkyGradient(this.gameData.height);
         }
         
-        // Check game over conditions
+        // Check game over conditions (only fall detection now, time is main constraint)
         this.checkGameOver();
         
         // Update UI
@@ -462,10 +476,53 @@ class GameScene extends Phaser.Scene {
     }
     
     checkGameOver() {
-        // Game over if player falls too far below the camera
-        const cameraY = this.cameras.main.scrollY;
-        if (this.player.y > cameraY + 700) {
+        if (this.gameData.isGameOver) return;
+        
+        // Calculate current height
+        const currentHeight = Math.max(0, (550 - this.player.y) / 10);
+        
+        // Show warning when approaching very low height (optional fall protection)
+        if (currentHeight <= 1 && currentHeight > -5) {
+            this.showFallWarning();
+        } else if (this.fallWarning) {
+            this.hideFallWarning();
+        }
+        
+        // Game over only if player falls way below the starting area (emergency failsafe)
+        // Main game over condition is now time-based
+        if (currentHeight <= -10) {
+            console.log(`💀 Game Over: Player fell too far below starting area (Height: ${currentHeight.toFixed(1)})`);
             this.gameOver();
+        }
+    }
+    
+    showFallWarning() {
+        if (this.fallWarning) return; // Already showing
+        
+        this.fallWarning = this.add.text(400, 100, '⚠️ CLIMB HIGHER! ⚠️', {
+            fontSize: '24px',
+            fill: '#FF0000',
+            fontFamily: 'Arial, sans-serif',
+            fontStyle: 'bold',
+            stroke: '#FFFFFF',
+            strokeThickness: 2
+        }).setOrigin(0.5).setScrollFactor(0);
+        
+        // Pulsing animation
+        this.tweens.add({
+            targets: this.fallWarning,
+            alpha: 0.3,
+            duration: 500,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Power2'
+        });
+    }
+    
+    hideFallWarning() {
+        if (this.fallWarning) {
+            this.fallWarning.destroy();
+            this.fallWarning = null;
         }
     }
     
@@ -536,26 +593,27 @@ class GameScene extends Phaser.Scene {
             this.gameTimer.destroy();
         }
         
+        // Clean up fall warning
+        this.hideFallWarning();
+        
         // Play game over sound
         if (window.GameManagers.audio) {
             window.GameManagers.audio.playGameOverSound();
         }
         
-        // Send game end event
+        // Send game end event (no time since it's always 60 seconds)
         this.sendGameEvent('gameEnd', {
             score: this.gameData.score,
-            height: this.gameData.height,
-            timeSeconds: this.gameData.gameTime,
+            height: this.gameData.maxHeight, // Use maximum height reached, not current height
             itemsCollected: this.gameData.itemsCollected,
             victory: false
         });
         
-        // Show game over screen after a delay
+        // Show game over screen after a delay (no time since it's always 60 seconds)
         this.time.delayedCall(2000, () => {
             this.scene.start('GameOverScene', {
                 score: this.gameData.score,
-                height: this.gameData.height,
-                time: this.gameData.gameTime,
+                height: this.gameData.maxHeight, // Use maximum height reached, not current height
                 items: this.gameData.itemsCollected
             });
         });
@@ -583,6 +641,9 @@ class GameScene extends Phaser.Scene {
                 }
             });
         }
+        
+        // Check game over conditions every frame for immediate response
+        this.checkGameOver();
         
         // Check pause
         if (Phaser.Input.Keyboard.JustDown(this.pauseKey)) {

@@ -9,7 +9,7 @@ class GameOverScene extends Phaser.Scene {
         // Receive data from GameScene
         this.finalScore = data.score || 0;
         this.finalHeight = data.height || 0;
-        this.gameTime = data.time || 0;
+        this.gameTime = data.time || null; // Time not shown for 60-second challenges
         this.itemsCollected = data.items || 0;
         this.victory = data.victory || false;
         
@@ -149,13 +149,17 @@ class GameOverScene extends Phaser.Scene {
         }).setOrigin(0.5);
         statsContainer.add(statsTitle);
         
-        // Individual stats
+        // Individual stats (excluding time for 60-second challenge mode)
         const stats = [
             { label: 'Final Score:', value: this.finalScore.toLocaleString(), icon: '🏆' },
             { label: 'Height Reached:', value: `${Math.floor(this.finalHeight)}m`, icon: '🏔️' },
-            { label: 'Time Played:', value: this.formatTime(this.gameTime), icon: '⏱️' },
             { label: 'Items Collected:', value: this.itemsCollected, icon: '✨' }
         ];
+        
+        // Only show time if it was provided (for other game modes)
+        if (this.gameTime !== null) {
+            stats.splice(2, 0, { label: 'Time Played:', value: this.formatTime(this.gameTime), icon: '⏱️' });
+        }
         
         stats.forEach((stat, index) => {
             const y = -40 + (index * 30);
@@ -199,15 +203,12 @@ class GameOverScene extends Phaser.Scene {
     }
     
     getPerformanceRating() {
-        const scoreRating = this.finalScore;
-        const heightRating = this.finalHeight;
-        const timeRating = this.gameTime;
-        
-        if (this.finalScore >= 2000 || this.finalHeight >= 1000) {
+        // Performance rating based on score and height (time not used in 60-second challenge)
+        if (this.finalScore >= 2000 || this.finalHeight >= 100) {
             return { text: '⭐ LEGENDARY CLIMBER ⭐', color: '#FFD700' };
-        } else if (this.finalScore >= 1000 || this.finalHeight >= 500) {
+        } else if (this.finalScore >= 1000 || this.finalHeight >= 50) {
             return { text: '🌟 SKILLED CLIMBER 🌟', color: '#C0C0C0' };
-        } else if (this.finalScore >= 500 || this.finalHeight >= 200) {
+        } else if (this.finalScore >= 500 || this.finalHeight >= 25) {
             return { text: '✨ RISING CLIMBER ✨', color: '#CD7F32' };
         } else {
             return { text: '🔸 NOVICE CLIMBER 🔸', color: '#4A90E2' };
