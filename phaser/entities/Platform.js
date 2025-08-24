@@ -26,7 +26,10 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
         // Type-specific setup
         this.setupByType();
         
-        console.log(`🏗️ ${type} platform created at`, x, y);
+        console.log(`🏗️ ${type} platform created at (${x}, ${y})`);
+        if (type === 'bouncy') {
+            console.log(`🚀 BOUNCY PLATFORM CREATED! Color: ${this.tintTopLeft.toString(16)}`);
+        }
     }
     
     setupByType() {
@@ -84,20 +87,23 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
     }
     
     setupBouncyPlatform() {
-        // Bouncy platform properties
-        this.bounceForce = -700;
-        this.setTint(0x32CD32); // Green tint to distinguish
+        // Boost platform properties - x2 jump height when user presses space
+        this.boostMultiplier = 2.0; // 2x normal jump height
+        this.setTint(0x228B22); // Dark green tint to distinguish
         this.setDepth(1);
         
-        // Add bouncy animation
+        // Add subtle glow animation to indicate boost capability
         this.scene.tweens.add({
             targets: this,
-            scaleY: 1.1,
-            duration: 1000,
+            scaleY: 1.05,
+            scaleX: 1.02,
+            duration: 1500,
             yoyo: true,
             repeat: -1,
             ease: 'Sine.easeInOut'
         });
+        
+        console.log('🚀 Boost platform created - provides x2 jump when pressing SPACE');
     }
     
     // Override update to handle manual movement for moving platforms
@@ -148,13 +154,19 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
     onPlayerLand(player) {
         if (!this.isActive) return;
         
+        console.log(`🏟️ Player landed on ${this.platformType} platform`);
+        
         switch (this.platformType) {
             case 'breakable':
+                console.log('💥 Triggering breakable platform');
                 this.startBreaking();
                 break;
             case 'bouncy':
-                this.bounce(player);
+                console.log('🚀 Ready for boost jump! Press SPACE for x2 jump height');
+                // No automatic bounce - player must jump manually for boost
                 break;
+            default:
+                console.log('📍 Normal platform landing');
         }
         
         // Play landing sound specific to platform type
@@ -262,38 +274,7 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
         console.log('💥 Platform broken!');
     }
     
-    bounce(player) {
-        if (!player || !this.isActive) return;
-        
-        // Apply bounce force to player
-        player.boost(this.bounceForce);
-        
-        // Visual bounce effect
-        this.scene.tweens.add({
-            targets: this,
-            scaleY: 0.7,
-            duration: 100,
-            yoyo: true,
-            ease: 'Power2.easeOut'
-        });
-        
-        // Create bounce particles
-        const bounceParticles = this.scene.add.particles(this.x, this.y - 8, 'sparkle-particle', {
-            speed: { min: 30, max: 80 },
-            scale: { start: 0.5, end: 0 },
-            lifespan: 500,
-            emitting: false,
-            angle: { min: -45, max: -135 }
-        });
-        bounceParticles.explode(6);
-        
-        // Clean up particles
-        this.scene.time.delayedCall(1000, () => {
-            bounceParticles.destroy();
-        });
-        
-        console.log('🚀 Player bounced from platform');
-    }
+
     
     // Static method to create platforms with appropriate spacing
     static generatePlatformCluster(scene, centerX, centerY, count = 3) {

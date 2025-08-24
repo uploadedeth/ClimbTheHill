@@ -163,17 +163,44 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     
     jump() {
         if (this.isGrounded || this.coyoteTimeCounter > 0) {
+            // Check if standing on a boost platform
+            const boostMultiplier = this.getBoostMultiplier();
+            const jumpForce = this.jumpForce * boostMultiplier;
+            
             // First jump or coyote time jump
-            this.setVelocityY(this.jumpForce);
+            this.setVelocityY(jumpForce);
             this.jumpsRemaining = this.maxJumps - 1;
             this.coyoteTimeCounter = 0;
-            this.onJump();
+            
+            if (boostMultiplier > 1) {
+                console.log(`🚀 BOOST JUMP! x${boostMultiplier} force applied: ${jumpForce}`);
+                this.onBoostJump();
+            } else {
+                this.onJump();
+            }
         } else if (this.jumpsRemaining > 0) {
-            // Double jump
+            // Double jump (no boost for double jumps)
             this.setVelocityY(this.jumpForce * 0.8); // Slightly weaker double jump
             this.jumpsRemaining--;
             this.onDoubleJump();
         }
+    }
+    
+    getBoostMultiplier() {
+        // Check if player is touching a boost platform
+        if (this.scene && this.scene.platforms) {
+            const platforms = this.scene.platforms.children.entries;
+            for (let platform of platforms) {
+                if (platform.platformType === 'bouncy' && 
+                    platform.isActive &&
+                    this.body.touching.down && 
+                    platform.body.touching.up &&
+                    Phaser.Geom.Rectangle.Overlaps(this.getBounds(), platform.getBounds())) {
+                    return platform.boostMultiplier || 2.0;
+                }
+            }
+        }
+        return 1.0; // Normal jump
     }
     
     onJump() {
@@ -214,6 +241,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         });
         
         console.log('🦘✨ Player double jumped');
+    }
+    
+    onBoostJump() {
+        // Play boost sound (stronger than normal jump)
+        if (window.GameManagers.audio) {
+            window.GameManagers.audio.playBoostSound();
+        }
+        
+        // Create enhanced boost particles
+        this.jumpParticles.setPosition(this.x, this.y + this.height / 2);
+        this.jumpParticles.explode(15); // More particles for boost
+        
+        // Add screen shake for boost jump feedback
+        this.scene.cameras.main.shake(150, 0.008);
+        
+        console.log('🚀💨 Player BOOST JUMPED from boost platform!');
     }
     
     onLand() {

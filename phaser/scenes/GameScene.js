@@ -207,6 +207,11 @@ class GameScene extends Phaser.Scene {
         startPlatform.platformIndex = 0; // Starting level
         this.platforms.add(startPlatform);
         
+        // TEMPORARY: Add bouncy platform for testing
+        const testBouncy = new Platform(this, 500, 420, 'bouncy');
+        testBouncy.platformIndex = 0.5;
+        this.platforms.add(testBouncy);
+        
         // Create initial platform clusters with indices
         this.generatePlatformCluster(400, 350); // Higher up
         this.generatePlatformCluster(300, 200); // Even higher
@@ -223,14 +228,14 @@ class GameScene extends Phaser.Scene {
             const x = Phaser.Math.Clamp(centerX + offsetX, 50, 750);
             const y = centerY + offsetY;
             
-            // Choose platform type based on height
+            // Choose platform type based on height (bouncy platforms rare and at higher altitudes)
             let type = 'normal';
             const random = Math.random();
             
             if (centerY < 0) { // Higher up, more variety
                 if (random < 0.3) type = 'moving';
                 else if (random < 0.5) type = 'breakable';
-                else if (random < 0.6) type = 'bouncy';
+                else if (random < 0.6) type = 'bouncy'; // 10% chance at high altitude only
             } else if (random < 0.2) {
                 type = 'moving';
             }
