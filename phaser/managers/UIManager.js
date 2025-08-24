@@ -36,7 +36,7 @@ class UIManager {
             this.showScorePopup(points);
         }
         
-        console.log('📊 Score updated:', score);
+        // console.log('📊 Score updated:', score);
     }
     
     // Update height display
@@ -52,7 +52,7 @@ class UIManager {
             }
         }
         
-        console.log('📏 Height updated:', Math.floor(height));
+        // console.log('📏 Height updated:', Math.floor(height));
     }
     
     // Update game time

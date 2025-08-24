@@ -48,7 +48,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Particle system for effects
         this.setupParticles();
         
-        console.log('🎮 Player created at', x, y);
+
     }
     
     setupParticles() {
@@ -182,7 +182,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.coyoteTimeCounter = 0;
             
             if (boostMultiplier > 1) {
-                console.log(`🚀 BOOST JUMP! x${boostMultiplier} force applied: ${jumpForce}`);
+
                 this.onBoostJump();
             } else {
                 this.onJump();
@@ -225,7 +225,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Screen shake for juice
         this.scene.cameras.main.shake(50, 0.005);
         
-        console.log('🦘 Player jumped');
+
     }
     
     onDoubleJump() {
@@ -249,7 +249,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         });
         
-        console.log('🦘✨ Player double jumped');
+
     }
     
     onBoostJump() {
@@ -265,7 +265,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Add screen shake for boost jump feedback
         this.scene.cameras.main.shake(150, 0.008);
         
-        console.log('🚀💨 Player BOOST JUMPED from boost platform!');
+
     }
     
     onLand() {
@@ -281,7 +281,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Small screen shake
         this.scene.cameras.main.shake(30, 0.003);
         
-        console.log('🌍 Player landed');
+
     }
     
     // Method to boost player upward (for special platforms or power-ups)
@@ -298,7 +298,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             window.GameManagers.audio.playBoostSound();
         }
         
-        console.log('🚀 Player boosted!');
+
     }
     
     // Method to handle collecting items
@@ -322,7 +322,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             collectParticles.destroy();
         });
         
-        console.log('✨ Player collected item');
+
     }
     
     // Reset player position and state
@@ -338,7 +338,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.currentState = 'idle';
         this.play('player-idle');
         
-        console.log('🔄 Player reset to', x, y);
+
     }
     
     destroy() {

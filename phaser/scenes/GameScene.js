@@ -6,7 +6,7 @@ class GameScene extends Phaser.Scene {
     }
     
     create() {
-        console.log('🎮 Starting ClimbTheHill GameScene');
+
         
         // Initialize game state
         this.initializeGameState();
@@ -199,7 +199,7 @@ class GameScene extends Phaser.Scene {
             this.wallpaperSystem.wallpapers.push(wallpaper);
         }
         
-        console.log('🖼️ Dynamic wallpaper system created');
+
     }
     
     createPlayer() {
@@ -408,7 +408,7 @@ class GameScene extends Phaser.Scene {
         
         // Check if time is up
         if (this.gameData.gameTime <= 0) {
-            console.log('⏰ Time Up! Game ended after 60 seconds');
+
             this.gameOver();
             return;
         }
@@ -443,7 +443,7 @@ class GameScene extends Phaser.Scene {
             // Set score to match highest platform reached (plus any collectible bonuses)
             const newScore = baseScore + (this.gameData.itemsCollected * this.scoring.itemCollected);
             
-            console.log(`🏔️ New platform reached! Platform ${platformIndex}, Score: ${newScore}`);
+
             
             // Update score directly (don't add, set it)
             this.gameData.score = newScore;
@@ -503,7 +503,7 @@ class GameScene extends Phaser.Scene {
         const currentWallpaper = this.wallpaperSystem.wallpapers[currentIndex];
         const newWallpaper = this.wallpaperSystem.wallpapers[targetIndex];
         
-        console.log(`🌄 Transitioning wallpaper from ${this.wallpaperSystem.currentWallpaper} to ${targetWallpaper}`);
+
         
         // Set new wallpaper to start invisible
         newWallpaper.setAlpha(0);
@@ -524,7 +524,7 @@ class GameScene extends Phaser.Scene {
                     onComplete: () => {
                         this.wallpaperSystem.currentWallpaper = targetWallpaper;
                         this.wallpaperSystem.isTransitioning = false;
-                        console.log(`✅ Wallpaper transition complete to wallpaper ${targetWallpaper}`);
+
                     }
                 });
             }
@@ -577,7 +577,7 @@ class GameScene extends Phaser.Scene {
         // Game over only if player falls way below the starting area (emergency failsafe)
         // Main game over condition is now time-based
         if (currentHeight <= -10) {
-            console.log(`💀 Game Over: Player fell too far below starting area (Height: ${currentHeight.toFixed(1)})`);
+
             this.gameOver();
         }
     }
@@ -656,7 +656,7 @@ class GameScene extends Phaser.Scene {
             window.GameManagers.audio.playScoreSound(this.scoring.itemCollected);
         }
         
-        console.log('✨ Item collected! Total items:', this.gameData.itemsCollected, 'Score:', this.gameData.score);
+
     }
     
     updateUI() {
@@ -672,7 +672,7 @@ class GameScene extends Phaser.Scene {
         
         this.gameData.isGameOver = true;
         
-        console.log('💀 Game Over! Final score:', this.gameData.score);
+
         
         // Stop game timer
         if (this.gameTimer) {

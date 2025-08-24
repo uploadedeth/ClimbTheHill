@@ -796,38 +796,62 @@ class ClimbTheHillGame {
     }
     
     setupLoadingTracking() {
-        // Track loading progress across all scenes with ClimbTheHill branding
-        let currentStep = 0;
-        let loadingSteps = [
-            { text: 'Building the mountain...', progress: 15, stepIndex: 0 },
-            { text: 'Creating platforms...', progress: 35, stepIndex: 1 },
-            { text: 'Preparing your climber...', progress: 60, stepIndex: 2 },
-            { text: 'Adding clouds and sky...', progress: 85, stepIndex: 3 },
+        // Track loading progress with real asset loading
+        this.loadingSteps = [
+            { text: 'Loading assets...', progress: 0, stepIndex: 0 },
+            { text: 'Creating platforms...', progress: 25, stepIndex: 1 },
+            { text: 'Preparing your climber...', progress: 50, stepIndex: 2 },
+            { text: 'Finishing up...', progress: 75, stepIndex: 3 },
             { text: 'ClimbTheHill ready!', progress: 100, stepIndex: 3 }
         ];
-
-        const updateLoading = () => {
-            if (currentStep < loadingSteps.length) {
-                const step = loadingSteps[currentStep];
-                this.updateLoadingProgress(step.progress, step.text);
-                this.updateLoadingSteps(step.stepIndex);
-                currentStep++;
-                
-                if (currentStep < loadingSteps.length) {
-                    setTimeout(updateLoading, 800);
-                } else {
-                    setTimeout(() => this.hideLoadingScreen(), 1000);
-                }
-            }
-        };
-
-        // Start loading animation
-        setTimeout(updateLoading, 500);
+        
+        this.currentLoadingStep = 0;
+        this.isLoadingComplete = false;
+        
+        // Store reference to this instance for BootScene to access
+        window.gameInstance = this;
+    }
+    
+    updateRealLoadingProgress(percentage) {
+        // Map real loading percentage to our loading steps
+        const progress = Math.round(percentage * 100);
+        
+        // Determine which step we should be on based on progress
+        let stepIndex = 0;
+        let stepText = 'Loading assets...';
+        
+        if (progress >= 75) {
+            stepIndex = 3;
+            stepText = 'Finishing up...';
+        } else if (progress >= 50) {
+            stepIndex = 2;
+            stepText = 'Preparing your climber...';
+        } else if (progress >= 25) {
+            stepIndex = 1;
+            stepText = 'Creating platforms...';
+        }
+        
+        // Update loading display
+        this.updateLoadingProgress(progress, stepText);
+        this.updateLoadingSteps(stepIndex);
+        this.currentLoadingStep = stepIndex;
+    }
+    
+    completeLoading() {
+        // When assets are completely loaded, finish immediately
+        this.isLoadingComplete = true;
+        this.updateLoadingProgress(100, 'ClimbTheHill ready!');
+        this.updateLoadingSteps(3);
+        
+        // Hide loading screen after a brief moment
+        setTimeout(() => this.hideLoadingScreen(), 300);
     }
     
     updateLoadingSteps(activeIndex) {
-        if (this.loadingSteps) {
-            this.loadingSteps.forEach((step, index) => {
+        // Get DOM elements for loading steps
+        const stepElements = document.querySelectorAll('.loading-step');
+        if (stepElements) {
+            stepElements.forEach((step, index) => {
                 step.classList.remove('active', 'completed');
                 if (index < activeIndex) {
                     step.classList.add('completed');

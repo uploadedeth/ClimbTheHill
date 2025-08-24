@@ -46,9 +46,9 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
         // Type-specific setup
         this.setupByType();
         
-        console.log(`🏗️ ${type} platform created at (${x}, ${y})`);
+
         if (type === 'bouncy') {
-            console.log(`🚀 BOUNCY PLATFORM CREATED! Color: ${this.tintTopLeft.toString(16)}`);
+
         }
     }
     
@@ -92,7 +92,7 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
         // Initialize movement
         this.isMoving = true;
         
-        console.log(`🟢 Moving platform setup: X=${this.originalX}, Y=${this.originalY}, bounds=[${this.leftBound}, ${this.rightBound}]`);
+
     }
     
     setupBreakablePlatform() {
@@ -123,7 +123,7 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
             ease: 'Sine.easeInOut'
         });
         
-        console.log('🚀 Boost platform created - provides x2 jump when pressing SPACE');
+
     }
     
     // Override update to handle manual movement for moving platforms
@@ -174,19 +174,19 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
     onPlayerLand(player) {
         if (!this.isActive) return;
         
-        console.log(`🏟️ Player landed on ${this.platformType} platform`);
+
         
         switch (this.platformType) {
             case 'breakable':
-                console.log('💥 Triggering breakable platform');
+
                 this.startBreaking();
                 break;
             case 'bouncy':
-                console.log('🚀 Ready for boost jump! Press SPACE for x2 jump height');
+
                 // No automatic bounce - player must jump manually for boost
                 break;
             default:
-                console.log('📍 Normal platform landing');
+
         }
         
         // Play landing sound specific to platform type
@@ -223,7 +223,7 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
             this.breakPlatform();
         });
         
-        console.log('💥 Breakable platform starting to break');
+
     }
     
     breakPlatform() {
@@ -291,7 +291,7 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
             window.GameManagers.audio.playPlatformBreakSound();
         }
         
-        console.log('💥 Platform broken!');
+
     }
     
 

@@ -9,10 +9,18 @@ class BootScene extends Phaser.Scene {
         // Set loading progress tracking
         this.load.on('progress', (percentage) => {
             console.log('Loading assets: ' + Math.round(percentage * 100) + '%');
+            // Update the real loading screen progress
+            if (window.gameInstance && window.gameInstance.updateRealLoadingProgress) {
+                window.gameInstance.updateRealLoadingProgress(percentage);
+            }
         });
         
         this.load.on('complete', () => {
             console.log('All assets loaded!');
+            // Complete loading immediately when assets are done
+            if (window.gameInstance && window.gameInstance.completeLoading) {
+                window.gameInstance.completeLoading();
+            }
         });
         
         console.log('🎮 Loading ClimbTheHill assets...');
