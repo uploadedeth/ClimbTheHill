@@ -2,12 +2,32 @@
 
 class Platform extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, type = 'normal') {
-        // Select texture based on type
+        // Select texture based on type and height
         let texture = 'platform';
         if (type === 'moving') {
-            texture = 'moving-platform';
+            // Calculate height for moving platforms: height = (700 - y) / 10
+            const height = (700 - y) / 10;
+            if (height < 100) {
+                texture = 'moving-platform-low'; // Wood for heights below 100m
+            } else if (height < 250) {
+                texture = 'moving-platform-medium'; // Rocky gray for heights 100-250m
+            } else {
+                texture = 'moving-platform-high'; // Winter blue for heights 250m+
+            }
         } else if (type === 'breakable') {
             texture = 'breakable-platform';
+        } else if (type === 'bouncy') {
+            texture = 'bouncy-platform';
+        } else if (type === 'normal') {
+            // Calculate height: height = (700 - y) / 10
+            const height = (700 - y) / 10;
+            if (height < 100) {
+                texture = 'platform-low'; // Wood with green plants for heights below 100m
+            } else if (height < 250) {
+                texture = 'platform-medium'; // Rocky gray with dust for heights 100-250m
+            } else {
+                texture = 'platform-high'; // Winter/snowy with blue colors for heights 250m+
+            }
         }
         
         super(scene, x, y, texture);

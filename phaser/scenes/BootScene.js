@@ -56,37 +56,157 @@ class BootScene extends Phaser.Scene {
 
     
     generatePlatformTextures() {
-        // Standard platform (64x16)
+        // Wood platform with green plants for low heights (0-100m)
         const platformGraphics = this.add.graphics();
-        platformGraphics.fillStyle(0x8B4513); // Brown color
+        
+        // Wood base - rich brown wood color
+        platformGraphics.fillStyle(0x8B4513); // Saddle brown
         platformGraphics.fillRect(0, 0, 64, 16);
         
-        // Add texture details
-        platformGraphics.fillStyle(0x654321); // Darker brown for texture
+        // Wood grain pattern
+        platformGraphics.fillStyle(0x654321); // Dark brown for wood grain
         for (let i = 0; i < 64; i += 8) {
-            platformGraphics.fillRect(i, 12, 8, 4);
+            platformGraphics.fillRect(i, 12, 8, 4); // Bottom edge details
+            platformGraphics.fillRect(i + 2, 8, 4, 2); // Middle grain lines
         }
         
-        // Add highlights
-        platformGraphics.fillStyle(0xA0522D); // Lighter brown
+        // Wood highlight
+        platformGraphics.fillStyle(0xA0522D); // Lighter brown highlight
         platformGraphics.fillRect(0, 0, 64, 2);
         
-        platformGraphics.generateTexture('platform', 64, 16);
+        // Add green plant details on top
+        platformGraphics.fillStyle(0x228B22); // Forest green for plants
+        // Small grass tufts across the platform
+        for (let i = 4; i < 60; i += 12) {
+            // Grass blades
+            platformGraphics.fillRect(i, 0, 2, 3);
+            platformGraphics.fillRect(i + 2, 0, 1, 4);
+            platformGraphics.fillRect(i + 4, 0, 2, 2);
+        }
+        
+        // Add some small leaves/foliage
+        platformGraphics.fillStyle(0x32CD32); // Lime green for variety
+        platformGraphics.fillRect(8, 0, 3, 2);
+        platformGraphics.fillRect(24, 0, 2, 3);
+        platformGraphics.fillRect(40, 0, 3, 2);
+        platformGraphics.fillRect(56, 0, 2, 2);
+        
+        platformGraphics.generateTexture('platform-low', 64, 16);
         platformGraphics.destroy();
         
-        // Moving platform (different color)
-        const movingPlatformGraphics = this.add.graphics();
-        movingPlatformGraphics.fillStyle(0x32CD32); // Green color
-        movingPlatformGraphics.fillRect(0, 0, 64, 16);
+        // Create rocky platform for medium altitudes (100-250m)
+        const rockyPlatformGraphics = this.add.graphics();
         
-        // Add glowing effect
-        movingPlatformGraphics.fillStyle(0x228B22); // Darker green
-        movingPlatformGraphics.fillRect(0, 12, 64, 4);
-        movingPlatformGraphics.fillStyle(0x90EE90); // Light green highlight
-        movingPlatformGraphics.fillRect(0, 0, 64, 2);
+        // Rocky base - dark gray color
+        rockyPlatformGraphics.fillStyle(0x696969); // Dark gray
+        rockyPlatformGraphics.fillRect(0, 0, 64, 16);
         
-        movingPlatformGraphics.generateTexture('moving-platform', 64, 16);
-        movingPlatformGraphics.destroy();
+        // Rocky texture with varied grays
+        rockyPlatformGraphics.fillStyle(0x2F4F4F); // Dark slate gray
+        for (let i = 0; i < 64; i += 12) {
+            rockyPlatformGraphics.fillRect(i + 2, 10, 6, 6); // Rocky chunks
+            rockyPlatformGraphics.fillRect(i + 1, 4, 3, 4); // Rock variations
+        }
+        
+        // Add dust particles on top
+        rockyPlatformGraphics.fillStyle(0xD2B48C); // Tan dust color
+        for (let i = 6; i < 58; i += 8) {
+            rockyPlatformGraphics.fillRect(i, 0, 2, 1); // Dust spots
+            rockyPlatformGraphics.fillRect(i + 3, 0, 1, 2); // More dust
+        }
+        
+        // Rocky cracks and highlights
+        rockyPlatformGraphics.fillStyle(0x808080); // Light gray highlights
+        rockyPlatformGraphics.fillRect(0, 0, 64, 1);
+        rockyPlatformGraphics.fillStyle(0x2F2F2F); // Very dark gray for deep cracks
+        rockyPlatformGraphics.fillRect(15, 3, 2, 10);
+        rockyPlatformGraphics.fillRect(35, 2, 1, 12);
+        rockyPlatformGraphics.fillRect(50, 4, 2, 8);
+        
+        rockyPlatformGraphics.generateTexture('platform-medium', 64, 16);
+        rockyPlatformGraphics.destroy();
+        
+        // Create winter platform for high altitudes (250m+)
+        const winterPlatformGraphics = this.add.graphics();
+        
+        // Ice/stone base - blue-gray color
+        winterPlatformGraphics.fillStyle(0x4682B4); // Steel blue
+        winterPlatformGraphics.fillRect(0, 0, 64, 16);
+        
+        // Darker blue-gray for depth
+        winterPlatformGraphics.fillStyle(0x2F4F4F); // Dark slate gray with blue tint
+        for (let i = 0; i < 64; i += 10) {
+            winterPlatformGraphics.fillRect(i, 12, 8, 4); // Bottom edge
+        }
+        
+        // Snow layer on top
+        winterPlatformGraphics.fillStyle(0xFFFAFA); // Snow white
+        winterPlatformGraphics.fillRect(0, 0, 64, 3); // Main snow layer
+        
+        // Snow drifts and details
+        winterPlatformGraphics.fillStyle(0xF0F8FF); // Alice blue for snow variation
+        for (let i = 4; i < 60; i += 12) {
+            winterPlatformGraphics.fillRect(i, 3, 6, 2); // Snow drifts
+            winterPlatformGraphics.fillRect(i + 2, 0, 3, 1); // Snow texture on top
+        }
+        
+        // Ice crystals/icicles
+        winterPlatformGraphics.fillStyle(0xE0FFFF); // Light cyan for ice
+        winterPlatformGraphics.fillRect(10, 16, 2, 2); // Small icicle
+        winterPlatformGraphics.fillRect(25, 15, 1, 3); // Thin icicle
+        winterPlatformGraphics.fillRect(40, 16, 3, 1); // Ice formation
+        winterPlatformGraphics.fillRect(55, 15, 2, 2); // Ice chunk
+        
+        winterPlatformGraphics.generateTexture('platform-high', 64, 16);
+        winterPlatformGraphics.destroy();
+        
+        // Moving platform for low heights (0-100m) - Wood color only
+        const movingLowGraphics = this.add.graphics();
+        movingLowGraphics.fillStyle(0x8B4513); // Saddle brown (same as basic platform)
+        movingLowGraphics.fillRect(0, 0, 64, 16);
+        
+        // Simple wood texture without plants
+        movingLowGraphics.fillStyle(0x654321); // Dark brown for basic texture
+        for (let i = 0; i < 64; i += 8) {
+            movingLowGraphics.fillRect(i, 12, 8, 4);
+        }
+        movingLowGraphics.fillStyle(0xA0522D); // Lighter brown highlight
+        movingLowGraphics.fillRect(0, 0, 64, 2);
+        
+        movingLowGraphics.generateTexture('moving-platform-low', 64, 16);
+        movingLowGraphics.destroy();
+        
+        // Moving platform for medium heights (100-250m) - Rocky gray only
+        const movingMediumGraphics = this.add.graphics();
+        movingMediumGraphics.fillStyle(0x696969); // Dark gray (same as basic platform)
+        movingMediumGraphics.fillRect(0, 0, 64, 16);
+        
+        // Simple rocky texture without dust
+        movingMediumGraphics.fillStyle(0x2F4F4F); // Dark slate gray
+        for (let i = 0; i < 64; i += 12) {
+            movingMediumGraphics.fillRect(i + 2, 10, 6, 6);
+        }
+        movingMediumGraphics.fillStyle(0x808080); // Light gray highlight
+        movingMediumGraphics.fillRect(0, 0, 64, 1);
+        
+        movingMediumGraphics.generateTexture('moving-platform-medium', 64, 16);
+        movingMediumGraphics.destroy();
+        
+        // Moving platform for high heights (250m+) - Winter blue only
+        const movingHighGraphics = this.add.graphics();
+        movingHighGraphics.fillStyle(0x4682B4); // Steel blue (same as basic platform)
+        movingHighGraphics.fillRect(0, 0, 64, 16);
+        
+        // Simple ice texture without snow details
+        movingHighGraphics.fillStyle(0x2F4F4F); // Dark blue-gray for depth
+        for (let i = 0; i < 64; i += 10) {
+            movingHighGraphics.fillRect(i, 12, 8, 4);
+        }
+        movingHighGraphics.fillStyle(0x87CEEB); // Sky blue highlight
+        movingHighGraphics.fillRect(0, 0, 64, 2);
+        
+        movingHighGraphics.generateTexture('moving-platform-high', 64, 16);
+        movingHighGraphics.destroy();
         
         // Breakable platform (fragile looking)
         const breakablePlatformGraphics = this.add.graphics();
@@ -101,6 +221,78 @@ class BootScene extends Phaser.Scene {
         
         breakablePlatformGraphics.generateTexture('breakable-platform', 64, 16);
         breakablePlatformGraphics.destroy();
+        
+        // Bouncy platform (black galaxy void style with subtle purple)
+        const bouncyPlatformGraphics = this.add.graphics();
+        
+        // Deep black base
+        bouncyPlatformGraphics.fillStyle(0x0A0A0A); // Very dark black
+        bouncyPlatformGraphics.fillRect(0, 0, 64, 16);
+        
+        // Add subtle dark purple void areas
+        bouncyPlatformGraphics.fillStyle(0x1A0A1A); // Very dark purple
+        bouncyPlatformGraphics.fillRect(8, 4, 12, 8);
+        bouncyPlatformGraphics.fillRect(32, 2, 16, 10);
+        bouncyPlatformGraphics.fillRect(52, 6, 8, 6);
+        
+        // Add tiny purple "stars" or void sparkles
+        bouncyPlatformGraphics.fillStyle(0x301030); // Subtle purple
+        bouncyPlatformGraphics.fillRect(12, 2, 1, 1);
+        bouncyPlatformGraphics.fillRect(28, 6, 1, 1);
+        bouncyPlatformGraphics.fillRect(45, 3, 1, 1);
+        bouncyPlatformGraphics.fillRect(58, 8, 1, 1);
+        bouncyPlatformGraphics.fillRect(18, 12, 1, 1);
+        bouncyPlatformGraphics.fillRect(38, 14, 1, 1);
+        
+        // Very subtle purple glow at bottom
+        bouncyPlatformGraphics.fillStyle(0x200A20); // Dark purple glow
+        bouncyPlatformGraphics.fillRect(0, 14, 64, 2);
+        
+        // Minimal purple highlight at top edge
+        bouncyPlatformGraphics.fillStyle(0x2D1B2D); // Darker purple highlight
+        bouncyPlatformGraphics.fillRect(0, 0, 64, 1);
+        
+        // Add bright pink cracks across the platform
+        bouncyPlatformGraphics.fillStyle(0xFF1493); // Deep pink for maximum visibility
+        
+        // Main vertical cracks (much bigger for visibility)
+        bouncyPlatformGraphics.fillRect(12, 0, 4, 16); // Left crack (4px wide, full height)
+        bouncyPlatformGraphics.fillRect(30, 0, 4, 16); // Center crack (4px wide, full height)
+        bouncyPlatformGraphics.fillRect(48, 0, 4, 16); // Right crack (4px wide, full height)
+        
+        // Horizontal crack connections (much thicker)
+        bouncyPlatformGraphics.fillRect(6, 6, 16, 3); // Left horizontal crack (3px tall)
+        bouncyPlatformGraphics.fillRect(26, 3, 18, 3); // Center horizontal crack (3px tall)
+        bouncyPlatformGraphics.fillRect(42, 9, 16, 3); // Right horizontal crack (3px tall)
+        
+        // Add brighter crack glow for more visibility
+        bouncyPlatformGraphics.fillStyle(0xFF69B4); // Hot pink for glow
+        
+        // Crack glow effect (bigger glow areas)
+        bouncyPlatformGraphics.fillRect(10, 0, 2, 16); // Left glow of left crack
+        bouncyPlatformGraphics.fillRect(16, 0, 2, 16); // Right glow of left crack
+        bouncyPlatformGraphics.fillRect(28, 0, 2, 16); // Left glow of center crack
+        bouncyPlatformGraphics.fillRect(34, 0, 2, 16); // Right glow of center crack
+        bouncyPlatformGraphics.fillRect(46, 0, 2, 16); // Left glow of right crack
+        bouncyPlatformGraphics.fillRect(52, 0, 2, 16); // Right glow of right crack
+        
+        // Large diagonal crack details with brighter color
+        bouncyPlatformGraphics.fillStyle(0xFF1493); // Back to bright pink
+        bouncyPlatformGraphics.fillRect(18, 2, 4, 2); // Bigger diagonal crack
+        bouncyPlatformGraphics.fillRect(19, 4, 4, 2);
+        bouncyPlatformGraphics.fillRect(20, 6, 4, 2);
+        bouncyPlatformGraphics.fillRect(21, 8, 4, 2);
+        
+        bouncyPlatformGraphics.fillRect(36, 7, 4, 2); // Another big diagonal
+        bouncyPlatformGraphics.fillRect(37, 9, 4, 2);
+        bouncyPlatformGraphics.fillRect(38, 11, 4, 2);
+        
+        // Add some extra crack branches for more visible effect
+        bouncyPlatformGraphics.fillRect(8, 12, 6, 2); // Bottom left branch
+        bouncyPlatformGraphics.fillRect(54, 4, 6, 2); // Top right branch
+        
+        bouncyPlatformGraphics.generateTexture('bouncy-platform', 64, 16);
+        bouncyPlatformGraphics.destroy();
         
         console.log('✅ Platform textures generated');
     }
