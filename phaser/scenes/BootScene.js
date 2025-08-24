@@ -21,7 +21,7 @@ class BootScene extends Phaser.Scene {
         this.load.image('player-sprite', 'assets/images/right-sticky.png');
         
         // Load menu wallpaper
-        this.load.image('menu-wallpaper', 'assets/images/menu-wallpaper.png');
+        this.load.image('menu-wallpaper', 'assets/images/wallpaper-stick.png');
         
         // Load game wallpapers for different heights
         this.load.image('wallpaper-1', 'assets/images/1.png'); // 0-100m

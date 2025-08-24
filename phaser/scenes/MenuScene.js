@@ -208,9 +208,9 @@ class MenuScene extends Phaser.Scene {
     }
     
     createInstructions() {
-        // Controls section in bottom left
-        const controlsContainer = this.add.container(120, 580);
-        controlsContainer.setScale(1.1); // Increased from 0.8 to 1.1
+        // Controls section in bottom left (moved lower)
+        const controlsContainer = this.add.container(120, 680);
+        controlsContainer.setScale(0.9); // Reduced from 1.1 to 0.9 for smaller appearance
         
         // Background for controls
         const controlsBg = this.add.rectangle(0, 0, 200, 140, 0x000000, 0.7); // Increased height for double jump text
@@ -219,39 +219,42 @@ class MenuScene extends Phaser.Scene {
         
         // Controls title
         const controlsTitle = this.add.text(0, -40, 'CONTROLS', {
-            fontSize: '18px', // Increased from 16px
+            fontSize: '14px', // Reduced from 18px
             fill: '#CCCCCC', // White-gray color
             fontFamily: 'Arial, sans-serif',
-            fontStyle: 'bold'
+            fontStyle: 'bold',
+            resolution: 2 // Add high resolution to prevent pixelation
         }).setOrigin(0.5);
         controlsContainer.add(controlsTitle);
         
         // Controls text
         const controlsText = this.add.text(0, -5, 'A/D or ←/→: Move\nSPACE or ↑: Jump\nDOUBLE SPACE: Double Jump', {
-            fontSize: '14px', // Increased from 12px
+            fontSize: '11px', // Reduced from 14px
             fill: '#CCCCCC', // White-gray color
             fontFamily: 'Arial, sans-serif',
             align: 'center',
-            lineSpacing: 4
+            lineSpacing: 3,
+            resolution: 2 // Add high resolution to prevent pixelation
         }).setOrigin(0.5);
         controlsContainer.add(controlsText);
         
         // Mobile controls hint
         if (this.isTouchDevice()) {
             const mobileHint = this.add.text(0, 30, 'Touch controls\navailable', {
-                fontSize: '12px', // Increased from 10px
+                fontSize: '9px', // Reduced from 12px
                 fill: '#AAAAAA', // Slightly darker gray
                 fontFamily: 'Arial, sans-serif',
-                align: 'center'
+                align: 'center',
+                resolution: 2 // Add high resolution to prevent pixelation
             }).setOrigin(0.5);
             controlsContainer.add(mobileHint);
         }
     }
     
     createScoringInfo() {
-        // Scoring info in bottom right
-        const scoringContainer = this.add.container(360, 580);
-        scoringContainer.setScale(1.1); // Increased from 0.8 to 1.1
+        // Scoring info in bottom right (moved lower)
+        const scoringContainer = this.add.container(360, 680);
+        scoringContainer.setScale(0.9); // Reduced from 1.1 to 0.9 for smaller appearance
         
         // Background for scoring info
         const scoringBg = this.add.rectangle(0, 0, 200, 120, 0x000000, 0.7); // Increased size
@@ -260,28 +263,31 @@ class MenuScene extends Phaser.Scene {
         
         // Scoring title
         const scoringTitle = this.add.text(0, -40, 'SCORING', {
-            fontSize: '18px', // Increased from 16px
+            fontSize: '14px', // Reduced from 18px
             fill: '#CCCCCC', // White-gray color
             fontFamily: 'Arial, sans-serif',
-            fontStyle: 'bold'
+            fontStyle: 'bold',
+            resolution: 2 // Add high resolution to prevent pixelation
         }).setOrigin(0.5);
         scoringContainer.add(scoringTitle);
         
         // Scoring text
         const scoringText = this.add.text(0, -5, 'Height climbed: +10\nPlatform reached: +50', {
-            fontSize: '12px', // Increased from 10px
+            fontSize: '10px', // Reduced from 12px
             fill: '#CCCCCC', // White-gray color
             fontFamily: 'Arial, sans-serif',
             align: 'center',
-            lineSpacing: 4
+            lineSpacing: 3,
+            resolution: 2 // Add high resolution to prevent pixelation
         }).setOrigin(0.5);
         scoringContainer.add(scoringText);
         
         // Bonus items text (separate to position with icon)
         const bonusText = this.add.text(-15, 15, 'Bonus Items:', {
-            fontSize: '12px',
+            fontSize: '10px', // Reduced from 12px
             fill: '#CCCCCC',
-            fontFamily: 'Arial, sans-serif'
+            fontFamily: 'Arial, sans-serif',
+            resolution: 2 // Add high resolution to prevent pixelation
         }).setOrigin(0.5);
         scoringContainer.add(bonusText);
         
@@ -292,9 +298,10 @@ class MenuScene extends Phaser.Scene {
         
         // Bonus points text
         const bonusPointsText = this.add.text(50, 15, '+100', {
-            fontSize: '12px',
+            fontSize: '10px', // Reduced from 12px
             fill: '#CCCCCC',
-            fontFamily: 'Arial, sans-serif'
+            fontFamily: 'Arial, sans-serif',
+            resolution: 2 // Add high resolution to prevent pixelation
         }).setOrigin(0.5);
         scoringContainer.add(bonusPointsText);
         
