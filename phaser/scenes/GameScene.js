@@ -366,16 +366,152 @@ class GameScene extends Phaser.Scene {
         this.mobileRightBtn = document.getElementById('move-right');
         this.mobileJumpBtn = document.getElementById('jump-btn');
         
+        // Left button controls
         if (this.mobileLeftBtn) {
-            this.mobileLeftBtn.addEventListener('touchstart', () => {
+            // Touch events
+            this.mobileLeftBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
                 this.mobileLeftBtn.classList.add('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('left', true);
+                }
             });
-            this.mobileLeftBtn.addEventListener('touchend', () => {
+            this.mobileLeftBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
                 this.mobileLeftBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('left', false);
+                }
+            });
+            this.mobileLeftBtn.addEventListener('touchcancel', (e) => {
+                e.preventDefault();
+                this.mobileLeftBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('left', false);
+                }
+            });
+            
+            // Mouse events for desktop testing
+            this.mobileLeftBtn.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                this.mobileLeftBtn.classList.add('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('left', true);
+                }
+            });
+            this.mobileLeftBtn.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                this.mobileLeftBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('left', false);
+                }
+            });
+            this.mobileLeftBtn.addEventListener('mouseleave', (e) => {
+                e.preventDefault();
+                this.mobileLeftBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('left', false);
+                }
             });
         }
         
-        // Similar setup for other mobile buttons...
+        // Right button controls
+        if (this.mobileRightBtn) {
+            // Touch events
+            this.mobileRightBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.mobileRightBtn.classList.add('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('right', true);
+                }
+            });
+            this.mobileRightBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                this.mobileRightBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('right', false);
+                }
+            });
+            this.mobileRightBtn.addEventListener('touchcancel', (e) => {
+                e.preventDefault();
+                this.mobileRightBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('right', false);
+                }
+            });
+            
+            // Mouse events for desktop testing
+            this.mobileRightBtn.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                this.mobileRightBtn.classList.add('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('right', true);
+                }
+            });
+            this.mobileRightBtn.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                this.mobileRightBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('right', false);
+                }
+            });
+            this.mobileRightBtn.addEventListener('mouseleave', (e) => {
+                e.preventDefault();
+                this.mobileRightBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('right', false);
+                }
+            });
+        }
+        
+        // Jump button controls
+        if (this.mobileJumpBtn) {
+            // Touch events
+            this.mobileJumpBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.mobileJumpBtn.classList.add('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('jump', true);
+                }
+            });
+            this.mobileJumpBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                this.mobileJumpBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('jump', false);
+                }
+            });
+            this.mobileJumpBtn.addEventListener('touchcancel', (e) => {
+                e.preventDefault();
+                this.mobileJumpBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('jump', false);
+                }
+            });
+            
+            // Mouse events for desktop testing
+            this.mobileJumpBtn.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                this.mobileJumpBtn.classList.add('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('jump', true);
+                }
+            });
+            this.mobileJumpBtn.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                this.mobileJumpBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('jump', false);
+                }
+            });
+            this.mobileJumpBtn.addEventListener('mouseleave', (e) => {
+                e.preventDefault();
+                this.mobileJumpBtn.classList.remove('pressed');
+                if (this.player) {
+                    this.player.setMobileInput('jump', false);
+                }
+            });
+        }
     }
     
     createUI() {

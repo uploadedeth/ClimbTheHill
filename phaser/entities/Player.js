@@ -42,6 +42,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.wasd = scene.input.keyboard.addKeys('W,S,A,D');
         this.spaceKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         
+        // Mobile input state
+        this.mobileInput = {
+            left: false,
+            right: false,
+            jump: false,
+            jumpPressed: false
+        };
+        
         // Animation state
         this.currentState = 'idle';
         
@@ -78,12 +86,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
     
     handleInput(time, delta) {
-        const isLeftPressed = this.cursors.left.isDown || this.wasd.A.isDown;
-        const isRightPressed = this.cursors.right.isDown || this.wasd.D.isDown;
-        const isJumpPressed = this.cursors.up.isDown || this.wasd.W.isDown || this.spaceKey.isDown;
+        const isLeftPressed = this.cursors.left.isDown || this.wasd.A.isDown || this.mobileInput.left;
+        const isRightPressed = this.cursors.right.isDown || this.wasd.D.isDown || this.mobileInput.right;
+        const isJumpPressed = this.cursors.up.isDown || this.wasd.W.isDown || this.spaceKey.isDown || this.mobileInput.jump;
         const isJumpJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up) || 
                                  Phaser.Input.Keyboard.JustDown(this.wasd.W) || 
-                                 Phaser.Input.Keyboard.JustDown(this.spaceKey);
+                                 Phaser.Input.Keyboard.JustDown(this.spaceKey) ||
+                                 this.mobileInput.jumpPressed;
         
         // Horizontal movement
         if (isLeftPressed) {
@@ -100,6 +109,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Jump buffering - if jump is pressed but player isn't grounded yet
         if (isJumpJustPressed) {
             this.jumpBufferCounter = this.jumpBufferTime;
+        }
+        
+        // Reset mobile jump pressed state after checking
+        if (this.mobileInput.jumpPressed) {
+            this.mobileInput.jumpPressed = false;
         }
         
         // Jump logic with coyote time and double jump
@@ -325,6 +339,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     }
     
+    // Mobile input control methods
+    setMobileInput(type, pressed) {
+        if (type === 'left') {
+            this.mobileInput.left = pressed;
+        } else if (type === 'right') {
+            this.mobileInput.right = pressed;
+        } else if (type === 'jump') {
+            if (pressed && !this.mobileInput.jump) {
+                // Jump was just pressed
+                this.mobileInput.jumpPressed = true;
+            }
+            this.mobileInput.jump = pressed;
+        }
+    }
+    
     // Reset player position and state
     reset(x, y) {
         this.setPosition(x, y);
@@ -338,7 +367,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.currentState = 'idle';
         this.play('player-idle');
         
-
+        // Reset mobile input
+        this.mobileInput = {
+            left: false,
+            right: false,
+            jump: false,
+            jumpPressed: false
+        };
     }
     
     destroy() {
